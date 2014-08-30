@@ -16,10 +16,10 @@ public class InputController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if(Input.touchCount > 0)
+		if(Input.GetMouseButtonDown(0))
 		{
 			isTouched = true;
-			touchPosition = Input.touches[0].position;
+			touchPosition = Input.mousePosition;
 		}
 		else
 		{
