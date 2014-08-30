@@ -37,7 +37,6 @@ public class Analytics : MonoBehaviour {
 			*/
 		});
 
-		Splyt.Instrumentation.Transaction("game").begin();
 		Splyt.Plugins.Session.Transaction().begin();
 		
 	}
@@ -47,16 +46,19 @@ public class Analytics : MonoBehaviour {
 		if (pauseStatus)
 		{
 			Splyt.Core.pause();
+			Splyt.Plugins.Session.Transaction ().end ();
 		}
 		else
 		{
 			Splyt.Core.resume();
+			Splyt.Plugins.Session.Transaction().begin();
 		}
 	}
 
 	//		
 	void OnApplicationQuit()
 	{
+		Splyt.Plugins.Session.Transaction ().end ();
 		/*
 		Splyt.Instrumentation.Transaction("game")
 			.setProperties(new Dictionary<string, object> {
