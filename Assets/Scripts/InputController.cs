@@ -6,6 +6,7 @@ public class InputController : MonoBehaviour
 	public Vector3 touchPosition = Vector3.zero;
 	public bool    isTouched = false;
 
+
 	// Use this for initialization
 	void Start () 
 	{

@@ -13,19 +13,34 @@ public enum GameStates
 
 public class GameManager : MonoBehaviour 
 {
-	private GameStates currentState = GameStates.INTRO;
+	private GameStates 		currentState = GameStates.INTRO;
+	private LevelManager 	levelMang;
 
+	public GameStates  		StateHandle
+	{
+		get{return currentState;}
+		set{currentState = value;}
+	}
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		CatchState();
+
+		if(levelMang.LivesLeft > 0)
+		{
+			StateHandle = GameStates.RESTARTING;
+		}
+		else
+		{
+			StateHandle = GameStates.DEAD;
+		}
 	}
 
 	void CatchState()
