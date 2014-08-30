@@ -20,9 +20,9 @@ public class Factory : MonoBehaviour {
 		instance = this;
 	}
 
-	// Use this for initialization
-	void Start () {
-	
+	public GameObject createBubble()
+	{
+		return (GameObject)Instantiate(bubblePrefab);
 	}
 	
 
