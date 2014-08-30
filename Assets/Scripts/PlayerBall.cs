@@ -5,12 +5,18 @@ public class PlayerBall : MonoBehaviour
 {
 	public float fGrowRate;
 	public float fMaxSize;
+
+	public bool bGrowing;
 	
 	// Use this for initialization
 	void Start () 
 	{
 		fGrowRate 	= 0.01f;
 		fMaxSize	= 5.0f;
+
+		bGrowing	= false;
+
+		StartCoroutine( "StartGrowing" );
 	}
 	
 	// Update is called once per frame
@@ -22,10 +28,15 @@ public class PlayerBall : MonoBehaviour
 	
 	public IEnumerator StartGrowing()
 	{
-		while( transform.localScale.x < fMaxSize )
+		if( bGrowing == false )
 		{
-			transform.localScale += new Vector3( fGrowRate, fGrowRate, fGrowRate );
-			yield return null;
+			bGrowing = true;
+
+			while( transform.localScale.x < fMaxSize )
+			{
+				transform.localScale += new Vector3( fGrowRate, fGrowRate, fGrowRate );
+				yield return null;
+			}
 		}
 	}
 
@@ -33,7 +44,7 @@ public class PlayerBall : MonoBehaviour
 	{
 		if( other.gameObject.tag == "Ball" )
 		{
-			NotificationCenter.DefaultCenter.PostNotification( this, "StartGrowing" );
+			other.gameObject.GetComponent<Ball>().StartCoroutine( "StartGrowing" );
 		}
 	}
 }
