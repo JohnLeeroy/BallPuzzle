@@ -8,6 +8,7 @@ public class Ball : MonoBehaviour
 	public float fDestroyDelay;											// Time between the ball reaching max growth and being destroyed
 
 	public bool bGrowing;												// Is the ball currently growing
+	public bool bCanGrow;												// Is the ball allowed to grow
 
 	public float fSpeed = 10;
 	
@@ -20,6 +21,7 @@ public class Ball : MonoBehaviour
 		fDestroyDelay	= 0.2f;
 
 		bGrowing		= false;
+		bCanGrow		= false;
 		startMoving ();
 	}
 
@@ -51,7 +53,8 @@ public class Ball : MonoBehaviour
 
 	public void StartGrowth()
 	{
-		StartCoroutine( StartGrowing() );
+		if( bCanGrow )
+			StartCoroutine( StartGrowing() );
 	}
 
 	public void startMoving()
@@ -74,7 +77,7 @@ public class Ball : MonoBehaviour
 		// Make other ball start growing
 		if (other.gameObject.tag == "Ball") {
 			Debug.Log (gameObject.name + " HIT BALL " + other.gameObject.name);
-			other.gameObject.GetComponent<Ball> ().startGrowing ();
+			other.gameObject.GetComponent<Ball>().StartGrowth();
 		} else if (other.gameObject.tag == "VWall") {
 			dir.x *= -1;
 		} else if (other.gameObject.tag == "HWall") {

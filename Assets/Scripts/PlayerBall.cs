@@ -11,6 +11,7 @@ public class PlayerBall : Ball
 		fDestroyDelay	= 0.2f;
 		
 		bGrowing		= false;
+		bCanGrow		= true;
 
 		StartCoroutine( base.StartGrowing() );
 	}
