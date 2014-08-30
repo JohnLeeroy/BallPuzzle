@@ -9,6 +9,9 @@ public class Ball : MonoBehaviour
 
 	public bool bGrowing;												// Is the ball currently growing
 
+	public float fSpeed = 10;
+	
+	Vector3 dir;
 
 	// Use this for initialization
 	public virtual void Start () 
@@ -18,6 +21,7 @@ public class Ball : MonoBehaviour
 		fDestroyDelay	= 2.0f;
 
 		bGrowing		= false;
+		startMoving ();
 	}
 	
 	// Update is called once per frame
@@ -57,13 +61,31 @@ public class Ball : MonoBehaviour
 		StartCoroutine( StartGrowing() );
 	}
 
+	public void startMoving()
+	{
+		StartCoroutine (Moving ());
+	}
+
+	IEnumerator Moving()
+	{
+		dir = new Vector3 (Random.Range (0f, 1f), Random.Range (0f, 1f), 0);
+
+		while (!bGrowing) {
+			transform.position += fSpeed * Time.deltaTime * dir;
+			yield return 0;
+		}
+	}
+
 	public virtual void OnTriggerEnter( Collider other )
 	{
 		// Make other ball start growing
-		if( other.gameObject.tag == "Ball" )
-		{
-			Debug.Log( gameObject.name + " HIT BALL " + other.gameObject.name );
-			other.gameObject.GetComponent<Ball>().startGrowing();
+		if (other.gameObject.tag == "Ball") {
+			Debug.Log (gameObject.name + " HIT BALL " + other.gameObject.name);
+			other.gameObject.GetComponent<Ball> ().startGrowing ();
+		} else if (other.gameObject.tag == "VWall") {
+			dir.x *= -1;
+		} else if (other.gameObject.tag == "HWall") {
+			dir.y *= -1;
 		}
 	}
 
