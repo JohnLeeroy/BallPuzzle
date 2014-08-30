@@ -9,23 +9,18 @@ public class Ball : MonoBehaviour
 
 	public bool bGrowing;												// Is the ball currently growing
 
-
-	// Use this for initialization
+	#region public virtual void Start()
 	public virtual void Start () 
 	{
 		fGrowRate 		= 1.0f;
 		fMaxSize		= 5.0f;
-		fDestroyDelay	= 2.0f;
+		fDestroyDelay	= 0.2f;
 
 		bGrowing		= false;
 	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-	
-	}
+	#endregion
 
+	#region public virtual IEnumerator StartGrowing()
 	public virtual IEnumerator StartGrowing()
 	{
 		// If the ball hasn't yet started growing
@@ -51,25 +46,32 @@ public class Ball : MonoBehaviour
 			DestroyBall();
 		}
 	}
+	#endregion
 
-	public void startGrowing()
+	#region public void StartGrowth()
+	public void StartGrowth()
 	{
 		StartCoroutine( StartGrowing() );
 	}
+	#endregion
 
+	#region public virtual void OnTriggerEnter( Collider other )
 	public virtual void OnTriggerEnter( Collider other )
 	{
 		// Make other ball start growing
 		if( other.gameObject.tag == "Ball" )
 		{
 			Debug.Log( gameObject.name + " HIT BALL " + other.gameObject.name );
-			other.gameObject.GetComponent<Ball>().startGrowing();
+			other.gameObject.GetComponent<Ball>().StartGrowth();
 		}
 	}
+	#endregion
 
+	#region public virtual void DestroyBall()
 	public virtual void DestroyBall()
 	{		
 		// Destroy the ball after destroy seconds
 		Destroy( gameObject, fDestroyDelay );
 	}
+	#endregion
 }
