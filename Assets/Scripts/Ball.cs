@@ -102,4 +102,12 @@ public class Ball : MonoBehaviour
 		bCanGrow = b;
 		gameObject.tag = "PlayerBall";
 	}
+
+	public void OnDestroy()
+	{
+		if( gameObject.name != "PlayerBall(Clone)" )
+		{
+			GameObject.Find( "ProgressBar" ).GetComponent<ProgressBar>().UpdatePercentage();
+		}
+	}
 }
