@@ -1,0 +1,15 @@
+#Note: that ! negates an ignore
+
+Temp/*
+Library/*
+Build/*
+Assets/SaveData/*
+
+*.svd
+*.userprefs
+*.db
+*.unityproj
+*.sln
+*.csproj
+*.pidb
+Assets/Thumbs.db.meta
