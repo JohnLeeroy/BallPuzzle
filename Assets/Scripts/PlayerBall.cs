@@ -1,15 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerBall : MonoBehaviour 
-{
-	public float fGrowRate;
-	public float fMaxSize;
-
-	public bool bGrowing;
-	
+public class PlayerBall : Ball 
+{	
 	// Use this for initialization
-	void Start () 
+	public override void Start () 
 	{
 		fGrowRate 	= 0.01f;
 		fMaxSize	= 5.0f;
@@ -22,25 +17,15 @@ public class PlayerBall : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if( Input.GetKeyDown( KeyCode.Return ) )
-			StartCoroutine( "StartGrowing" );
 	}
 	
-	public IEnumerator StartGrowing()
+	public override IEnumerator StartGrowing()
 	{
-		if( bGrowing == false )
-		{
-			bGrowing = true;
-
-			while( transform.localScale.x < fMaxSize )
-			{
-				transform.localScale += new Vector3( fGrowRate, fGrowRate, fGrowRate );
-				yield return null;
-			}
-		}
+		base.StartGrowing();
+		yield return null;
 	}
 
-	void OnTriggerEnter( Collider other )
+	public override void OnTriggerEnter( Collider other )
 	{
 		if( other.gameObject.tag == "Ball" )
 		{

@@ -9,7 +9,7 @@ public class Ball : MonoBehaviour
 	public bool bGrowing;
 
 	// Use this for initialization
-	void Start () 
+	public virtual void Start () 
 	{
 		fGrowRate 	= 0.01f;
 		fMaxSize	= 5.0f;
@@ -23,7 +23,7 @@ public class Ball : MonoBehaviour
 	
 	}
 
-	public IEnumerator StartGrowing()
+	public virtual IEnumerator StartGrowing()
 	{
 		if( bGrowing == false )
 		{
@@ -37,7 +37,7 @@ public class Ball : MonoBehaviour
 		}
 	}
 
-	void OnTriggerEnter( Collider other )
+	public virtual void OnTriggerEnter( Collider other )
 	{
 		if( other.gameObject.tag == "Ball" )
 		{
