@@ -6,10 +6,11 @@ public class PlayerBall : Ball
 	// Use this for initialization
 	public override void Start () 
 	{
-		fGrowRate 	= 1.0f;												// Speed at which the ball grows	
-		fMaxSize	= 5.0f;												// Maximum size the ball can be
-											
-		bGrowing	= false;											// Is the ball currently growing	
+		fGrowRate 		= 1.0f;
+		fMaxSize		= 5.0f;
+		fDestroyDelay	= 2.0f;
+		
+		bGrowing		= false;
 
 		StartCoroutine( base.StartGrowing() );
 	}
@@ -28,5 +29,10 @@ public class PlayerBall : Ball
 	public override void OnTriggerEnter( Collider other )
 	{
 		base.OnTriggerEnter( other );
+	}
+
+	public override void DestroyBall()
+	{
+		base.DestroyBall();
 	}
 }

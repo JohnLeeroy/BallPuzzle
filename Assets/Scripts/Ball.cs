@@ -5,16 +5,19 @@ public class Ball : MonoBehaviour
 {
 	public float fGrowRate;												// Speed at which the ball grows
 	public float fMaxSize;												// Maximum size the ball can be
+	public float fDestroyDelay;											// Time between the ball reaching max growth and being destroyed
 
 	public bool bGrowing;												// Is the ball currently growing
+
 
 	// Use this for initialization
 	public virtual void Start () 
 	{
-		fGrowRate 	= 1.0f;
-		fMaxSize	= 5.0f;
+		fGrowRate 		= 1.0f;
+		fMaxSize		= 5.0f;
+		fDestroyDelay	= 2.0f;
 
-		bGrowing	= false;
+		bGrowing		= false;
 	}
 	
 	// Update is called once per frame
@@ -40,6 +43,12 @@ public class Ball : MonoBehaviour
 			// Clamp the ball size to the max size
 			if( transform.localScale.x > fMaxSize || transform.localScale.y > fMaxSize || transform.localScale.z > fMaxSize )
 				transform.localScale = new Vector3( fMaxSize, fMaxSize, fMaxSize );
+
+			// Broadcast that the ball is being destroyed
+			NotificationCenter.DefaultCenter.PostNotification(this, "OnDestroyBall");
+
+			// Destroy the ball
+			DestroyBall();
 		}
 	}
 
@@ -48,8 +57,14 @@ public class Ball : MonoBehaviour
 		// Make other ball start growing
 		if( other.gameObject.tag == "Ball" )
 		{
-			Debug.Log( this.gameObject.name + " HIT BALL " + other.gameObject.name );
+			Debug.Log( gameObject.name + " HIT BALL " + other.gameObject.name );
 			StartCoroutine( other.gameObject.GetComponent<Ball>().StartGrowing() );
 		}
+	}
+
+	public virtual void DestroyBall()
+	{		
+		// Destroy the ball after destroy seconds
+		Destroy( gameObject, fDestroyDelay );
 	}
 }
