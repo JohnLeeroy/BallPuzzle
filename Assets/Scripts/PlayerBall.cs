@@ -6,12 +6,12 @@ public class PlayerBall : Ball
 	// Use this for initialization
 	public override void Start () 
 	{
-		fGrowRate 	= 0.01f;
-		fMaxSize	= 5.0f;
+		fGrowRate 	= 1.0f;												// Speed at which the ball grows	
+		fMaxSize	= 5.0f;												// Maximum size the ball can be
+											
+		bGrowing	= false;											// Is the ball currently growing	
 
-		bGrowing	= false;
-
-		StartCoroutine( "StartGrowing" );
+		StartCoroutine( base.StartGrowing() );
 	}
 	
 	// Update is called once per frame
@@ -27,9 +27,6 @@ public class PlayerBall : Ball
 
 	public override void OnTriggerEnter( Collider other )
 	{
-		if( other.gameObject.tag == "Ball" )
-		{
-			other.gameObject.GetComponent<Ball>().StartCoroutine( "StartGrowing" );
-		}
+		base.OnTriggerEnter( other );
 	}
 }
