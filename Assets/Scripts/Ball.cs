@@ -75,12 +75,18 @@ public class Ball : MonoBehaviour
 	public virtual void OnTriggerEnter( Collider other )
 	{
 		// Make other ball start growing
-		if (other.gameObject.tag == "Ball") {
+		if (other.gameObject.tag == "Ball" && gameObject.tag == "PlayerBall" ) 
+		{
+			other.gameObject.GetComponent<Ball>().SetCanGrow( true );
 			Debug.Log (gameObject.name + " HIT BALL " + other.gameObject.name);
 			other.gameObject.GetComponent<Ball>().StartGrowth();
-		} else if (other.gameObject.tag == "VWall") {
+		} 
+		else if (other.gameObject.tag == "VWall") 
+		{
 			dir.x *= -1;
-		} else if (other.gameObject.tag == "HWall") {
+		} 
+		else if (other.gameObject.tag == "HWall") 
+		{
 			dir.y *= -1;
 		}
 	}
@@ -89,5 +95,11 @@ public class Ball : MonoBehaviour
 	{		
 		// Destroy the ball after destroy seconds
 		Destroy( gameObject, fDestroyDelay );
+	}
+
+	public void SetCanGrow( bool b )
+	{
+		bCanGrow = b;
+		gameObject.tag = "PlayerBall";
 	}
 }
