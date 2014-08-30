@@ -52,13 +52,18 @@ public class Ball : MonoBehaviour
 		}
 	}
 
+	public void startGrowing()
+	{
+		StartCoroutine( StartGrowing() );
+	}
+
 	public virtual void OnTriggerEnter( Collider other )
 	{
 		// Make other ball start growing
 		if( other.gameObject.tag == "Ball" )
 		{
 			Debug.Log( gameObject.name + " HIT BALL " + other.gameObject.name );
-			StartCoroutine( other.gameObject.GetComponent<Ball>().StartGrowing() );
+			other.gameObject.GetComponent<Ball>().startGrowing();
 		}
 	}
 

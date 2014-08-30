@@ -3,27 +3,25 @@ using System.Collections;
 
 public class InputController : MonoBehaviour 
 {
+	public static InputController instance;
 	public Vector3 touchPosition = Vector3.zero;
 	public bool    isTouched = false;
 
 
 	// Use this for initialization
-	void Start () 
+	void Awake () 
 	{
-	
+		instance = this;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(Input.GetMouseButtonDown(0))
+		isTouched = false;
+		if(Input.GetMouseButtonUp(0))
 		{
 			isTouched = true;
 			touchPosition = Input.mousePosition;
-		}
-		else
-		{
-			isTouched = false;
 		}
 	}
 }

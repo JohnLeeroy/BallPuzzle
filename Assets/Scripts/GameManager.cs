@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 	void Update () 
 	{
 		CatchState();
-
+		HandleInput ();
 		if(levelMang.LivesLeft > 0)
 		{
 			StateHandle = GameStates.RESTARTING;
@@ -52,6 +52,24 @@ public class GameManager : MonoBehaviour
 		case GameStates.PLAYING:{break;}
 		case GameStates.DEAD:{break;}
 		case GameStates.RESTARTING:{break;}
+		}
+	}
+
+	void HandleInput()
+	{
+		if (InputController.instance.isTouched) 
+		{
+			levelMang.LivesLeft--;
+			GameObject bubble = Factory.getInstance().createBubble();
+			//bubble.transform.position = Camera.main.
+			Ray ray;
+			RaycastHit hit;
+			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			if (Physics.Raycast(ray, out hit, 100))
+			{
+				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
+
+			}
 		}
 	}
 
