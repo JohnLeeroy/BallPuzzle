@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 		if (InputController.instance.isTouched) 
 		{
 			levelMang.LivesLeft--;
-			GameObject bubble = Factory.getInstance().createBubble();
+			GameObject bubble = Factory.getInstance().createPlayerBubble();
 			//bubble.transform.position = Camera.main.
 			Ray ray;
 			RaycastHit hit;
