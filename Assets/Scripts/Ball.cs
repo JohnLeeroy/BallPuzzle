@@ -13,21 +13,14 @@ public class Ball : MonoBehaviour
 	
 	Vector3 dir;
 
-	// Use this for initialization
 	public virtual void Start () 
 	{
 		fGrowRate 		= 1.0f;
 		fMaxSize		= 5.0f;
-		fDestroyDelay	= 2.0f;
+		fDestroyDelay	= 0.2f;
 
 		bGrowing		= false;
 		startMoving ();
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-	
 	}
 
 	public virtual IEnumerator StartGrowing()
@@ -56,7 +49,7 @@ public class Ball : MonoBehaviour
 		}
 	}
 
-	public void startGrowing()
+	public void StartGrowth()
 	{
 		StartCoroutine( StartGrowing() );
 	}
