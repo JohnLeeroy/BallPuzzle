@@ -23,25 +23,44 @@ public class GameManager : MonoBehaviour
 		set{currentState = value;}
 	}
 
+	static private GameManager instance;
+	public GameManager getInstance()
+	{
+		return instance;
+	}
+
 	private GameStates prevState;
 	private float lastBubblePopTime; 
 
 	bool isWin = false;
 
-	public static bool isQuitting = false;
+	public static bool isGameOver = false;
 
+	void Awake()
+	{
+		if (instance != null) {
+			Destroy (gameObject);
+			return;
+		}
+
+		instance = this;
+		DontDestroyOnLoad (gameObject);
+	}
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log ("SDHKGSDJLKGSDJHSGDLKJHGSDKJLHSDGLKJHGDSKLJGSDH");
+		Debug.Log ("OnStart " + GetInstanceID());
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 		currentState = GameStates.PLAYING;
+
+		isGameOver = false;
+		isWin = false;
 	}
-	
+
 	// Update is called once per frame
 	void Update () 
 	{
@@ -84,14 +103,15 @@ public class GameManager : MonoBehaviour
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit, 100))
 			{
+				Debug.Log("PRESS TO MAKE");
+
 				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
 				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
 
 				lastBubblePopTime = Time.time; 		//reset the pop timer when the player spawns a bubble
 
-				//TODO handle last player try spent, if ballsAlive > 0, game over
 				if(levelMang.playerLives == 0)
-					StartCoroutine(CR_OnLastPlayerBubbleSpawn());
+					StartCoroutine ("CR_OnLastPlayerBubbleSpawn");
 			}
 		}
 	}
@@ -118,11 +138,13 @@ public class GameManager : MonoBehaviour
 		else
 			Debug.Log ("GAME OVER");
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
+		isGameOver = true;
 	}
 
 	void OnBubblePop(NotificationCenter.Notification notif)
 	{
 		levelMang.ballsAlive--;
+		Debug.Log ("BALLS LEFT " + levelMang.ballsAlive);
 		if (levelMang.ballsAlive <= 0) {
 			Debug.Log ("No more Balls, we win");
 			isWin = true;
@@ -134,19 +156,49 @@ public class GameManager : MonoBehaviour
 	//Checks for game end if no bubbles are popped for bubble lifetime
 	IEnumerator CR_OnLastPlayerBubbleSpawn()
 	{
-		while (Time.time - lastBubblePopTime < 2) {
+		Debug.Log ("STart");
+		while (Time.time - lastBubblePopTime < 3) {
 			yield return 0;
 		}
 
 		if (levelMang.ballsAlive == 0) 
 			isWin = true;
 
+		Debug.Log ("LastPLayerBubbleSpawn");
 		GameOver();
 	}
 
 	void OnApplicationQuit()
 	{
-		isQuitting = true;
+		isGameOver = true;
+	}
+
+	void OnLevelWasLoaded()
+	{
+		if(GetInstanceID() != instance.GetInstanceID()){
+			Destroy(gameObject);
+			return;
+		}
+
+		Debug.Log ("OnLoadLevel " + GetInstanceID());
+		StopAllCoroutines ();
+		/*NotificationCenter.DefaultCenter.RemoveObserver (this, "Pause");
+		NotificationCenter.DefaultCenter.RemoveObserver (this, "Resume");
+		NotificationCenter.DefaultCenter.RemoveObserver (this, "GameOver");
+		NotificationCenter.DefaultCenter.RemoveObserver (this, "OnBubblePop");
+		*/
+		Time.timeScale = 1;
+		
+		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
+		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
+		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
+		currentState = GameStates.PLAYING;
+		
+		isGameOver = false;
+		isWin = false;
+
 	}
 
 }

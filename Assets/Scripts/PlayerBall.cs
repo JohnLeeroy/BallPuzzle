@@ -29,7 +29,7 @@ public class PlayerBall : Ball
 
 	new void OnDestroy()
 	{
-		if (GameManager.isQuitting)
+		if (GameManager.isGameOver)
 			return;
 		NotificationCenter.DefaultCenter.PostNotification (this, "OnPlayerBubblePop");
 	}

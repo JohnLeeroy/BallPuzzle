@@ -33,7 +33,7 @@ public class ScoreSystem : MonoBehaviour {
 		chainCounter++;
 		score += baseBubbleValue * chainComboMultipliers [chainCounter];
 
-		Debug.Log ("Score: " + score);
+		//Debug.Log ("Score: " + score);
 		Hashtable data = new Hashtable();
 		data ["score"] = score;
 		NotificationCenter.DefaultCenter.PostNotification (this, "UpdatedScore", data);

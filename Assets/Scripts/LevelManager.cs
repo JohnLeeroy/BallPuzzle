@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour 
 {
-	public static LevelManager Instance;
 	public int levelNum    = 0;
 	public int ballsCount  = 5;
 	public List<Material>  	backgroundMaterials;
@@ -27,7 +26,6 @@ public class LevelManager : MonoBehaviour
 	// Use this for initialization
 	void Awake()
 	{
-		Instance = this;
 		bubbles = new List<Transform> (ballsCount);
 		int tempInt = Random.Range(0,4);
 		background.renderer.material = backgroundMaterials[tempInt];
@@ -47,7 +45,6 @@ public class LevelManager : MonoBehaviour
 			bubbles.Add(newBubble.transform);
 			//TODO Randomly position bubbles
 		}
-
 	}
 
 }

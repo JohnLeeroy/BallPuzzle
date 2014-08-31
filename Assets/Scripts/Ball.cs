@@ -62,7 +62,7 @@ public class Ball : MonoBehaviour
 
 	IEnumerator Moving()
 	{
-		dir = new Vector3 (Random.Range (0f, 1f), Random.Range (0f, 1f), 0);
+		dir = new Vector3 (Random.Range (-1f, 1f), Random.Range (-1f, 1f), 0);
 
 		while (!bGrowing) {
 			transform.position += fSpeed * Time.deltaTime * dir;
@@ -76,7 +76,7 @@ public class Ball : MonoBehaviour
 		if (other.gameObject.tag == "Ball" && gameObject.tag == "PlayerBall" ) 
 		{
 			other.gameObject.GetComponent<Ball>().SetCanGrow( true );
-			Debug.Log (gameObject.name + " HIT BALL " + other.gameObject.name);
+			//Debug.Log (gameObject.name + " HIT BALL " + other.gameObject.name);
 			other.gameObject.GetComponent<Ball>().StartGrowth();
 		} 
 		else if (other.gameObject.tag == "VWall") 
@@ -105,7 +105,7 @@ public class Ball : MonoBehaviour
 
 	public void OnDestroy()
 	{
-		if (GameManager.isQuitting)
+		if (GameManager.isGameOver)
 			return;
 		NotificationCenter.DefaultCenter.PostNotification(this, "OnBubblePop");
 	}

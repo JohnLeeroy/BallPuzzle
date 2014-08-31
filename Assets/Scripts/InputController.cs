@@ -7,10 +7,15 @@ public class InputController : MonoBehaviour
 	public Vector3 touchPosition = Vector3.zero;
 	public bool    isTouched = false;
 
-	bool enableTouch = true;
+	public bool enableTouch = true;
+
 	// Use this for initialization
 	void Awake () 
 	{
+		if (instance != null) {
+			Destroy(gameObject);
+			return;
+		}
 		instance = this;
 	}
 
@@ -47,5 +52,10 @@ public class InputController : MonoBehaviour
 		enableTouch = true;
 	}
 
+	void OnLevelWasLoaded()
+	{
+		isTouched = false;
+		enableTouch = true;
+	}
 
 }
