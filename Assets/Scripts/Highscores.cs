@@ -9,7 +9,7 @@ public class Highscores : MonoBehaviour
 	{
 		int fontSize = (int)( fFontSizeRate * Screen.height );
 
-		IList data = File.GetHighscores();
+		IList data = FileScript.GetHighscores();
 
 		string rank = "Rank\n";
 		string names = "Initials\n";
@@ -50,6 +50,6 @@ public class Highscores : MonoBehaviour
 	void Update()
 	{
 		if( Input.GetKeyDown( KeyCode.Return ) )
-			File.SaveScore( "---", 0 );
+			FileScript.SaveScore( "---", 0 );
 	}
 }
