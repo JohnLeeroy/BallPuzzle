@@ -78,7 +78,7 @@ public class Ball : MonoBehaviour
 	{
 		while(!bGrowing)
 		{
-			transform.Rotate (fSpeed,fSpeed,fSpeed);
+			transform.Rotate (fSpeed*dir.x,-fSpeed*dir.y,0);
 			yield return 0;
 		}
 	}
