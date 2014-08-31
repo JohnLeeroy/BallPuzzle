@@ -9,14 +9,20 @@ public class GameplayUI : MonoBehaviour {
 	
 	//public PauseModal pauseModal;
 	// Use this for initialization
+	int fontSize = 24;
+	LevelManager levelManager;
 	void Start () {
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedLevel");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnSpawnPlayerBubble");
 
-		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
-		gtLives.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
-		gtLevel.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
+		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
+		gtLives.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
+		gtLevel.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
+		levelManager = GameObject.Find ("LevelManager").GetComponent<LevelManager> ();
+		//GameManager.
+
+		gtLives.text = "Lives " + levelManager.LivesLeft;
 	}
 
 	void UpdatedScore(NotificationCenter.Notification notif)
@@ -26,12 +32,12 @@ public class GameplayUI : MonoBehaviour {
 
 	void OnUpdatedLevel()
 	{
-		gtLevel.text = GameManager.Level.ToString();
+		gtLevel.text = "Level " + GameManager.Level.ToString();
 	}
 	
 	void OnSpawnPlayerBubble()
 	{
-		gtLives.text = GameObject.Find("LevelManager").GetComponent<LevelManager>().LivesLeft.ToString();
+		gtLives.text = "Lives " + levelManager.LivesLeft;
 	}
 }
 
