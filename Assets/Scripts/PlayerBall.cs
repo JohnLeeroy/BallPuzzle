@@ -6,10 +6,6 @@ public class PlayerBall : Ball
 	#region public override void Start()
 	public override void Start () 
 	{
-		fGrowRate 		= 1.0f;
-		fMaxSize		= 5.0f;
-		fDestroyDelay	= 0.2f;
-		
 		bGrowing		= false;
 		bCanGrow		= true;
 

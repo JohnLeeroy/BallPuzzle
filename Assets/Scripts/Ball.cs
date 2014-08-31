@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Ball : MonoBehaviour 
 {
-	public float fGrowRate;												// Speed at which the ball grows
-	public float fMaxSize;												// Maximum size the ball can be
-	public float fDestroyDelay;											// Time between the ball reaching max growth and being destroyed
+	public float fGrowRate = 1.0f;										// Speed at which the ball grows
+	public float fMaxSize = 5.0f;										// Maximum size the ball can be
+	public float fDestroyDelay = .2f;									// Time between the ball reaching max growth and being destroyed
 
 	public bool bGrowing;												// Is the ball currently growing
 	public bool bCanGrow;												// Is the ball allowed to grow
@@ -16,10 +16,6 @@ public class Ball : MonoBehaviour
 
 	public virtual void Start () 
 	{
-		fGrowRate 		= 1.0f;
-		fMaxSize		= 5.0f;
-		fDestroyDelay	= 0.2f;
-
 		bGrowing		= false;
 		bCanGrow		= false;
 		startMoving ();
