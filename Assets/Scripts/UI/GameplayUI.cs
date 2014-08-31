@@ -13,6 +13,10 @@ public class GameplayUI : MonoBehaviour {
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedLevel");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnSpawnPlayerBubble");
+
+		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
+		gtLives.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
+		gtLevel.fontSize = Mathf.Min(Screen.height,Screen.width)/20;
 	}
 
 	void UpdatedScore(NotificationCenter.Notification notif)
