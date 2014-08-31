@@ -37,6 +37,9 @@ public class LevelManager : MonoBehaviour
 		instance = this;
 
 		bubbles = new List<Transform> (ballsCount);
+		randomizedNum = Random.Range(0,4);
+		background.renderer.material = backgroundMaterials[randomizedNum];
+		playbar.texture = playbarTextures [randomizedNum];
 	}
 
 	void Start () 
@@ -52,9 +55,7 @@ public class LevelManager : MonoBehaviour
 			bubbles.Add(newBubble.transform);
 			//TODO Randomly position bubbles
 		}
-		randomizedNum = Random.Range(0,4);
-		background.renderer.material = backgroundMaterials[randomizedNum];
-		playbar.texture = playbarTextures [randomizedNum];
+
 	}
 
 }

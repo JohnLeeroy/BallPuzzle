@@ -25,6 +25,7 @@ public class Factory : MonoBehaviour {
 	void Start()
 	{
 		ballColor = LevelManager.getInstance().randomizedNum;
+		Debug.Log(ballColor);
 	}
 
 	public GameObject createBubble()
