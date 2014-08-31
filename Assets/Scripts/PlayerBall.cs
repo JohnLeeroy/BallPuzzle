@@ -26,4 +26,9 @@ public class PlayerBall : Ball
 	{
 		base.DestroyBall();
 	}
+
+	void onDestroy()
+	{
+		NotificationCenter.DefaultCenter.PostNotification (this, "OnPlayerBubblePop");
+	}
 }
