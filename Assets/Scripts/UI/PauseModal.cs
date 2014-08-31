@@ -40,7 +40,8 @@ public class PauseModal : MonoBehaviour {
 		GUI.Box (background, "");
 
 		if (GUI.Button (replayBtn, "Replay")) {
-
+			Time.timeScale = 1;
+			Application.LoadLevel(Application.loadedLevel);
 		}
 		
 		if (GUI.Button (resumeBtn, "Resume")) {

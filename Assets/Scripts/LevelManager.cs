@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class LevelManager : MonoBehaviour 
 {
 	public static LevelManager Instance;
-	public int levelNum = 0;
-	public int ballsCount = 5;
+	public int levelNum    = 0;
+	public int ballsCount  = 5;
 	public int playerLives = 3;
 
 	List<Transform> bubbles;
 
-	private int ballsAlive = 0;
+	public int ballsAlive = 0;
 	private Factory	factory;
 
 
@@ -39,21 +39,8 @@ public class LevelManager : MonoBehaviour
 			newBubble.transform.parent = transform;
 			bubbles.Add(newBubble.transform);
 			//TODO Randomly position bubbles
-
 		}
 
-		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 	}
 
-	void OnBubblePop()
-	{
-		ballsAlive--;
-		if (ballsAlive <= 0)
-			NotificationCenter.DefaultCenter.PostNotification (this, "GameOver");
-	}
-	// Update is called once per frame
-	void Update () 
-	{
-
-	}
 }

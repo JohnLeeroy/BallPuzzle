@@ -27,8 +27,10 @@ public class PlayerBall : Ball
 		base.DestroyBall();
 	}
 
-	void onDestroy()
+	new void OnDestroy()
 	{
+		if (GameManager.isQuitting)
+			return;
 		NotificationCenter.DefaultCenter.PostNotification (this, "OnPlayerBubblePop");
 	}
 }

@@ -11,6 +11,7 @@ public class ProgressBar : MonoBehaviour
 	void Start () 
 	{
 		iTotalBalls = GameObject.Find( "LevelManager" ).GetComponent<LevelManager>().ballsCount;
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 	}
 	
 	// Update is called once per frame
@@ -22,5 +23,10 @@ public class ProgressBar : MonoBehaviour
 	{
 		iBallsDestroyed++;
 		fPercentComplete = iBallsDestroyed / (float)iTotalBalls;
+	}
+
+	void OnBubblePop()
+	{
+		UpdatePercentage ();
 	}
 }

@@ -14,8 +14,11 @@ public class Ball : MonoBehaviour
 	
 	Vector3 dir;
 
+	private static int counter = 0;
 	public virtual void Start () 
 	{
+		name = "Ball " + counter;
+		counter++;
 		bGrowing		= false;
 		bCanGrow		= false;
 		startMoving ();
@@ -40,7 +43,6 @@ public class Ball : MonoBehaviour
 				transform.localScale = new Vector3( fMaxSize, fMaxSize, fMaxSize );
 
 			// Broadcast that the ball is being destroyed
-			NotificationCenter.DefaultCenter.PostNotification(this, "OnBubblePop");
 			
 			// Destroy the ball
 			DestroyBall();
@@ -103,9 +105,8 @@ public class Ball : MonoBehaviour
 
 	public void OnDestroy()
 	{
-		if( gameObject.name != "PlayerBall(Clone)" )
-		{
-			GameObject.Find( "ProgressBar" ).GetComponent<ProgressBar>().UpdatePercentage();
-		}
+		if (GameManager.isQuitting)
+			return;
+		NotificationCenter.DefaultCenter.PostNotification(this, "OnBubblePop");
 	}
 }

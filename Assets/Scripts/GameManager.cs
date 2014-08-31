@@ -22,16 +22,23 @@ public class GameManager : MonoBehaviour
 		get{return currentState;}
 		set{currentState = value;}
 	}
+
 	private GameStates prevState;
+	private float lastBubblePopTime; 
+
+	bool isWin = false;
+
+	public static bool isQuitting = false;
 
 	// Use this for initialization
 	void Start () 
 	{
+		Debug.Log ("SDHKGSDJLKGSDJHSGDLKJHGSDKJLHSDGLKJHGDSKLJGSDH");
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
-
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 		currentState = GameStates.PLAYING;
 	}
 	
@@ -78,11 +85,17 @@ public class GameManager : MonoBehaviour
 			if (Physics.Raycast(ray, out hit, 100))
 			{
 				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
-
 				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
+
+				lastBubblePopTime = Time.time; 		//reset the pop timer when the player spawns a bubble
+
+				//TODO handle last player try spent, if ballsAlive > 0, game over
+				if(levelMang.playerLives == 0)
+					StartCoroutine(CR_OnLastPlayerBubbleSpawn());
 			}
 		}
 	}
+
 
 	void Pause()
 	{
@@ -100,8 +113,40 @@ public class GameManager : MonoBehaviour
 
 	void GameOver()
 	{
-		Debug.Log ("GAME OVER");
+		if (isWin)
+			Debug.Log ("VICTORY");
+		else
+			Debug.Log ("GAME OVER");
+		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 	}
 
-	//TODO handle last player try spent, if ballsAlive > 0, game over
+	void OnBubblePop(NotificationCenter.Notification notif)
+	{
+		Debug.Log ("Bubble Pop: " + notif.sender.name);
+		levelMang.ballsAlive--;
+		Debug.Log ("Balls Left: " + levelMang.ballsAlive);
+		if (levelMang.ballsAlive <= 0) {
+			Debug.Log ("No more Balls, we win");
+		}
+		lastBubblePopTime = Time.time;
+	}
+		
+	//Checks for game end if no bubbles are popped for bubble lifetime
+	IEnumerator CR_OnLastPlayerBubbleSpawn()
+	{
+		while (Time.time - lastBubblePopTime < 2) {
+			yield return 0;
+		}
+
+		if (levelMang.ballsAlive == 0) 
+			isWin = true;
+
+		GameOver();
+	}
+
+	void OnApplicationQuit()
+	{
+		isQuitting = true;
+	}
+
 }
