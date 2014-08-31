@@ -50,6 +50,6 @@ public class Highscores : MonoBehaviour
 	void Update()
 	{
 		if( Input.GetKeyDown( KeyCode.Return ) )
-			File.SaveScore( "JJJ", 54321 );
+			File.SaveScore( "---", 0 );
 	}
 }
