@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PauseModal : MonoBehaviour {
 
-	
 	Rect background;
 	Rect replayBtn;
 	Rect resumeBtn;
@@ -21,7 +20,6 @@ public class PauseModal : MonoBehaviour {
 		                      background.min.y + background.height * .75f - 30, 60, 60);
 
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
-		StartCoroutine (Test_Pause ());
 	}
 
 	IEnumerator Test_Pause()
