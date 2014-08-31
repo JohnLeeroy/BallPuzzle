@@ -5,6 +5,7 @@ public class MainMenuButton : MonoBehaviour
 {	
 	void Update () 
 	{
+		Debug.Log( Application.persistentDataPath);
 		if( Input.GetMouseButtonUp( 0 ) )
 		{
 			switch( gameObject.name )

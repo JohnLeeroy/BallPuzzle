@@ -7,16 +7,16 @@ public class LevelManager : MonoBehaviour
 	public int levelNum    = 0;
 	public int ballsCount  = 5;
 	public int randomizedNum = 0;
+
 	public List<Material>  	backgroundMaterials;
 	public GameObject		background;
 	public List<Texture2D>   playbarTextures;
 	public GUITexture		playbar;
 	public int playerLives = 3;
-
-	List<Transform> bubbles;
-
 	public int ballsAlive = 0;
+	private static LevelManager instance;
 	private Factory	factory;
+	List<Transform> bubbles;
 
 
 	public int LivesLeft
@@ -24,11 +24,22 @@ public class LevelManager : MonoBehaviour
 		get{return playerLives;}
 		set{playerLives = value;}
 	}
-	// Use this for initialization
+	public static LevelManager getInstance()
+	{
+		return instance;	
+	}
+	
 	void Awake()
 	{
+		if(instance != null)
+			Destroy(gameObject);
+		
+		instance = this;
+
 		bubbles = new List<Transform> (ballsCount);
-	
+		randomizedNum = Random.Range(0,4);
+		background.renderer.material = backgroundMaterials[randomizedNum];
+		playbar.texture = playbarTextures [randomizedNum];
 	}
 
 	void Start () 
@@ -44,9 +55,7 @@ public class LevelManager : MonoBehaviour
 			bubbles.Add(newBubble.transform);
 			//TODO Randomly position bubbles
 		}
-		randomizedNum = Random.Range(0,4);
-		background.renderer.material = backgroundMaterials[randomizedNum];
-		playbar.texture = playbarTextures [randomizedNum];
+
 	}
 
 }

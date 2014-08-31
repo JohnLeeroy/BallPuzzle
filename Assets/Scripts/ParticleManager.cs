@@ -8,7 +8,7 @@ public class ParticleManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		levelMang = LevelManager.getInstance();
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnPlayerBubblePop");
 	}
