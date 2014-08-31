@@ -3,7 +3,6 @@
 Temp/*
 Library/*
 Build/*
-Assets/SaveData/*
 
 *.svd
 *.userprefs
