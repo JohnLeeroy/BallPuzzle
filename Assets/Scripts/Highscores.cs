@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Highscores : MonoBehaviour
 {
-	public float fFontSizeRate = 0.1f;
+	private float fFontSizeRate = 0.05f;
 
 	void Start()
 	{
