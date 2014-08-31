@@ -9,32 +9,34 @@ public class ScoreSystem : MonoBehaviour {
 	int chainCounter = 0;	//number of chained bubbles per SINGLE touch
 	int touchIndex = 0;  //counts the number of spawning taps
 
-	int score = 0;
+	public int score = 0;
 
 	void Start () {
 		NotificationCenter.DefaultCenter.AddObserver(this, "OnSpawnPlayerBubble");
 		NotificationCenter.DefaultCenter.AddObserver(this, "OnBubblePop");
-		
-	}
-
-	IEnumerator CR_ComboListener()
-	{
-		int startTouchIndex = touchIndex;
-		while (startTouchIndex == touchIndex) {
-
-			yield return 0;
-		}
-		chainCounter = 0;	//reset chain counter on new touch
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnPlayerBubblePop");
 	}
 
 	void OnSpawnPlayerBubble()
 	{
 		touchIndex++;
+		chainCounter = 0;
+	}
+
+	void OnPlayerBubblePop()
+	{
+
 	}
 
 	void OnBubblePop()
 	{
 		chainCounter++;
+		score += baseBubbleValue * chainComboMultipliers [chainCounter];
+
+		Debug.Log ("Score: " + score);
+		Hashtable data = new Hashtable();
+		data ["score"] = score;
+		NotificationCenter.DefaultCenter.PostNotification (this, "UpdatedScore", data);
 	}
 
 }

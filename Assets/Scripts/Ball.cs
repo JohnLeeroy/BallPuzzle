@@ -40,8 +40,8 @@ public class Ball : MonoBehaviour
 				transform.localScale = new Vector3( fMaxSize, fMaxSize, fMaxSize );
 
 			// Broadcast that the ball is being destroyed
-			NotificationCenter.DefaultCenter.PostNotification(this, "OnDestroyBall");
-
+			NotificationCenter.DefaultCenter.PostNotification(this, "OnBubblePop");
+			
 			// Destroy the ball
 			DestroyBall();
 		}
