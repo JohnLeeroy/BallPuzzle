@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	static private GameManager instance;
-	public GameManager getInstance()
+	public static GameManager getInstance()
 	{
 		return instance;
 	}
@@ -37,7 +37,10 @@ public class GameManager : MonoBehaviour
 	public static bool isGameOver = false;
 
 	static int currentLevel = 1;
-	public static int Level { get { return currentLevel; } }
+	public int Level { get { return currentLevel; } }
+
+	int score;
+	public int Score { get { return score; } }
 
 	void Awake()
 	{
@@ -133,8 +136,10 @@ public class GameManager : MonoBehaviour
 
 	void GameOver()
 	{
-		if (isWin)
+		if (isWin) {
 			Debug.Log ("VICTORY");
+			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
+		}
 		else
 			Debug.Log ("GAME OVER");
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
@@ -190,6 +195,7 @@ public class GameManager : MonoBehaviour
 		isGameOver = false;
 		isWin = false;
 
+		GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score = score;
 		currentLevel++;
 		//setNextLevelDifficulty ();
 	}

@@ -3,8 +3,15 @@ using System.Collections;
 
 public class Analytics : MonoBehaviour {
 
+	private static Analytics instance;
 	void Awake()
 	{
+		if (instance != null) {
+			Destroy(gameObject);
+			return;
+		}
+		instance = this;
+
 		Splyt.InitParams initParams = Splyt.InitParams.create(
 			"personal17153-test"								// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
 			//,userInfo: Splyt.EntityInfo.createUserInfo("joe")		// (optional) Only necessary if user info is known at startup, otherwise use registerUser later
@@ -38,7 +45,8 @@ public class Analytics : MonoBehaviour {
 		});
 
 		Splyt.Plugins.Session.Transaction().begin();
-		
+
+		DontDestroyOnLoad (gameObject);
 	}
 
 	void OnApplicationPause(bool pauseStatus)

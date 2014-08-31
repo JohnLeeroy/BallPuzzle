@@ -23,6 +23,8 @@ public class GameplayUI : MonoBehaviour {
 		//GameManager.
 
 		gtLives.text = "Lives " + levelManager.LivesLeft;
+		gtLevel.text = "Level " + GameManager.getInstance ().Level;
+		gtScore.text = "Score " + GameManager.getInstance ().Score;
 	}
 
 	void UpdatedScore(NotificationCenter.Notification notif)
@@ -32,7 +34,7 @@ public class GameplayUI : MonoBehaviour {
 
 	void OnUpdatedLevel()
 	{
-		gtLevel.text = "Level " + GameManager.Level.ToString();
+		gtLevel.text = "Level " + GameManager.getInstance().Level.ToString();
 	}
 	
 	void OnSpawnPlayerBubble()
