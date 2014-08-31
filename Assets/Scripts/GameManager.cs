@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
+		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 
 		currentState = GameStates.PLAYING;
 	}
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
 
 	void HandleInput()
 	{
-		if (currentState == GameStates.PLAYING && InputController.instance.isTouched) 
+		if (InputController.instance.isTouched && levelMang.playerLives > 0) 
 		{
 			levelMang.LivesLeft--;
 			GameObject bubble = Factory.getInstance().createPlayerBubble();
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
 			if (Physics.Raycast(ray, out hit, 100))
 			{
 				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
+
 				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
 			}
 		}
@@ -96,5 +98,10 @@ public class GameManager : MonoBehaviour
 		Time.timeScale = 1;
 	}
 
+	void GameOver()
+	{
+		Debug.Log ("GAME OVER");
+	}
 
+	//TODO handle last player try spent, if ballsAlive > 0, game over
 }

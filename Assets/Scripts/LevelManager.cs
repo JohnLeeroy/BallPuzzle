@@ -26,10 +26,13 @@ public class LevelManager : MonoBehaviour
 		Instance = this;
 		bubbles = new List<Transform> (ballsCount);
 	}
+
 	void Start () 
 	{
 		factory = Factory.getInstance ();
 		GameObject newBubble;
+		ballsAlive = ballsCount;
+
 		for (int i = 0; i < ballsCount; i++) {
 			newBubble =factory.createBubble(); 
 			newBubble.name = "Bubble";
@@ -38,8 +41,16 @@ public class LevelManager : MonoBehaviour
 			//TODO Randomly position bubbles
 
 		}
+
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 	}
-	
+
+	void OnBubblePop()
+	{
+		ballsAlive--;
+		if (ballsAlive <= 0)
+			NotificationCenter.DefaultCenter.PostNotification (this, "GameOver");
+	}
 	// Update is called once per frame
 	void Update () 
 	{
