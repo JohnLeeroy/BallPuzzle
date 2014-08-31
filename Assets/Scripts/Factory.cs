@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Factory : MonoBehaviour {
 
-	public GameObject bubblePrefab;
-	public GameObject playerBubblePrefab;
-
+	//public GameObject bubblePrefab;
+	//public GameObject playerBubblePrefab;
+	public List<GameObject> bubblePrefab;
+	public List<GameObject> playerBubblePrefab;
 	private static Factory instance;
+	private int ballColor = 0;
 	
 	public static Factory getInstance()
 	{
@@ -20,15 +22,19 @@ public class Factory : MonoBehaviour {
 		
 		instance = this;
 	}
+	void Start()
+	{
+		ballColor = LevelManager.getInstance().randomizedNum;
+	}
 
 	public GameObject createBubble()
 	{
-		return (GameObject)Instantiate(bubblePrefab);
+		return (GameObject)Instantiate(bubblePrefab[ballColor]);
 	}
 
 	public GameObject createPlayerBubble()
 	{
-		return (GameObject)Instantiate(playerBubblePrefab);
+		return (GameObject)Instantiate(playerBubblePrefab[ballColor]);
 	}
 	
 
