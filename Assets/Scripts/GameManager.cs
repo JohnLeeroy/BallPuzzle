@@ -7,6 +7,7 @@ public enum GameStates
 	INTRO,
 	ALIVE,
 	PLAYING,
+	PAUSED,
 	DEAD,
 	RESTARTING
 };
@@ -21,11 +22,16 @@ public class GameManager : MonoBehaviour
 		get{return currentState;}
 		set{currentState = value;}
 	}
+	private GameStates prevState;
 
 	// Use this for initialization
 	void Start () 
 	{
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
+		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
+
+		currentState = GameStates.PLAYING;
 	}
 	
 	// Update is called once per frame
@@ -33,7 +39,9 @@ public class GameManager : MonoBehaviour
 	{
 		CatchState();
 		HandleInput ();
-		if(levelMang.LivesLeft > 0)
+
+		/*
+		 * if(levelMang.LivesLeft > 0)
 		{
 			StateHandle = GameStates.RESTARTING;
 		}
@@ -41,6 +49,7 @@ public class GameManager : MonoBehaviour
 		{
 			StateHandle = GameStates.DEAD;
 		}
+		*/
 	}
 
 	void CatchState()
@@ -57,7 +66,7 @@ public class GameManager : MonoBehaviour
 
 	void HandleInput()
 	{
-		if (InputController.instance.isTouched) 
+		if (currentState == GameStates.PLAYING && InputController.instance.isTouched) 
 		{
 			levelMang.LivesLeft--;
 			GameObject bubble = Factory.getInstance().createPlayerBubble();
@@ -71,6 +80,20 @@ public class GameManager : MonoBehaviour
 				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
 			}
 		}
+	}
+
+	void Pause()
+	{
+		prevState = currentState;
+		currentState = GameStates.PAUSED;
+		Time.timeScale = 0;
+	}
+
+	void Resume()
+	{
+		currentState = prevState;
+		Debug.Log (currentState.ToString ());
+		Time.timeScale = 1;
 	}
 
 
