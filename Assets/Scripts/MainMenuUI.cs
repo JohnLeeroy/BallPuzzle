@@ -28,8 +28,8 @@ public class MainMenuUI : MonoBehaviour {
 			}
 			else if(leaderboardButton.GetScreenRect().Contains(mousePos))
 			{
+				Application.LoadLevel("Highscores");
 				Debug.Log("Leaderboard Button");
-				
 			}
 		}
 	}
