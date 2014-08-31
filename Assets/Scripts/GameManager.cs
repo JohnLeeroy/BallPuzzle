@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
 			if (Physics.Raycast(ray, out hit, 100))
 			{
 				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
-
+				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
 			}
 		}
 	}
