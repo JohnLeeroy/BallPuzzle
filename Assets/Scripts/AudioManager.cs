@@ -5,12 +5,12 @@ public class AudioManager : MonoBehaviour {
 	public AudioClip[] clips;
 
 	//RENAME ME TO ACTUAL SOUNDS
-	public const int SOUND_ONE = 0;
-	public const int SOUND_TWO = 1;
-	public const int LASER_THREE = 2;
-	public const int PLAYER_DEATH = 3;
-	public const int ENEMY_DEATH = 4;
-	public const int POWERUP_PICKUP = 5;
+	public const int LEVEL_START = 0;
+	public const int BUTTON_DOWN = 1;
+	public const int BOUNCE = 2;
+	public const int EXPLOSION = 3;
+	public const int DRIP = 4;
+	public const int END_GAME = 5;
 	
 	private static AudioManager instance;
 	
