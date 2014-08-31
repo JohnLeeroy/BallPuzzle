@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainMenuButton : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+public class MainMenuButton : MonoBehaviour 
+{	
+	void Update () 
+	{
+		if( Input.GetMouseButtonUp( 0 ) )
+		{
+			switch( gameObject.name )
+			{
+			case "StartButton":
+				Application.LoadLevel( "Arcade" );
+				break;
+			case "LeaderboardButton":
+				Application.LoadLevel( "Highscores" );
+				break;
+			case "CreditsButton":
+				Application.LoadLevel( "Credits" );
+				break;
+			}
+		}
 	}
 }
