@@ -3,15 +3,10 @@ using System.Collections;
 
 public class ProgressBar : MonoBehaviour 
 {
-	public static ProgressBar instance;
 	public float 	fPercentComplete = 0.0f;
 	public int		iTotalBalls;
 	public int 	iBallsDestroyed = 0;
 
-	void Awake()
-	{
-		instance = this;
-	}
 	// Use this for initialization
 	void Start () 
 	{
