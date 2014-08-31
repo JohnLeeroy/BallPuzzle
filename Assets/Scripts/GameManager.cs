@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 		currentState = GameStates.PLAYING;
-
+		AudioManager.getInstance().Play(0);
 		isGameOver = false;
 		isWin = false;
 	}
@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (InputController.instance.isTouched && levelMang.playerLives > 0) 
 		{
+			AudioManager.getInstance().Play(4);
 			levelMang.LivesLeft--;
 			GameObject bubble = Factory.getInstance().createPlayerBubble();
 			//bubble.transform.position = Camera.main.
@@ -141,7 +142,10 @@ public class GameManager : MonoBehaviour
 			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
 		}
 		else
+		{
 			Debug.Log ("GAME OVER");
+			AudioManager.getInstance().Play(5);
+		}
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
 	}
