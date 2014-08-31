@@ -11,17 +11,23 @@ public class GameplayUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
+		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedLevel");
+		NotificationCenter.DefaultCenter.AddObserver (this, "OnSpawnPlayerBubble");
 	}
 
 	void UpdatedScore(NotificationCenter.Notification notif)
 	{
 		gtScore.text = notif.data ["score"].ToString(); 
 	}
+
+	void OnUpdatedLevel()
+	{
+		gtLevel.text = GameManager.Level.ToString();
+	}
 	
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void OnSpawnPlayerBubble()
+	{
+		gtLives.text = GameObject.Find("LevelManager").GetComponent<LevelManager>().LivesLeft.ToString();
 	}
 }
 

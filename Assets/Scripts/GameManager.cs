@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour
 
 	public static bool isGameOver = false;
 
+	static int currentLevel = 1;
+	public static int Level { get { return currentLevel; } }
+
 	void Awake()
 	{
 		if (instance != null) {
@@ -141,7 +144,7 @@ public class GameManager : MonoBehaviour
 	void OnBubblePop(NotificationCenter.Notification notif)
 	{
 		levelMang.ballsAlive--;
-		Debug.Log ("BALLS LEFT " + levelMang.ballsAlive);
+		//Debug.Log ("BALLS LEFT " + levelMang.ballsAlive);
 		if (levelMang.ballsAlive <= 0) {
 			Debug.Log ("No more Balls, we win");
 			isWin = true;
@@ -153,15 +156,13 @@ public class GameManager : MonoBehaviour
 	//Checks for game end if no bubbles are popped for bubble lifetime
 	IEnumerator CR_OnLastPlayerBubbleSpawn()
 	{
-		Debug.Log ("STart");
-		while (Time.time - lastBubblePopTime < 3) {
+		while (Time.time - lastBubblePopTime < 2) {
 			yield return 0;
 		}
 
 		if (levelMang.ballsAlive == 0) 
 			isWin = true;
 
-		Debug.Log ("LastPLayerBubbleSpawn");
 		GameOver();
 	}
 
@@ -188,5 +189,33 @@ public class GameManager : MonoBehaviour
 		
 		isGameOver = false;
 		isWin = false;
+
+		currentLevel++;
+		//setNextLevelDifficulty ();
+	}
+
+	const int baseBubbleCount = 5;
+	const int baseTryCount = 1;
+
+	void setNextLevelDifficulty()
+	{
+		
+		//levelMang.ballsCount = baseBubbleCount + Formula(currentLevel);
+		//Debug.Log("Ball Start Count " + levelMang.ballsCount);
+	}
+
+	int Formula(int n)
+	{
+		int sum = 0;
+		int current = n;
+		for (int i = n; n > 0; n--) {
+			current = n;
+			while(current > 0)
+			{
+				sum += n;
+				current--;
+			}
+		}
+		return sum;
 	}
 }
