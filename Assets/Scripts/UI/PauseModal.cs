@@ -34,6 +34,7 @@ public class PauseModal : MonoBehaviour {
 
 	void OnGUI()
 	{
+		/*
 		if (!isEnabled)
 			return;
 
@@ -48,6 +49,7 @@ public class PauseModal : MonoBehaviour {
 			NotificationCenter.DefaultCenter.PostNotification(this, "Resume");
 			isEnabled = false;
 		}
+		*/
 	}
 
 	void Pause()

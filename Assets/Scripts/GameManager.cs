@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
 	public static bool isGameOver = false;
 
-	static int currentLevel = 1;
+	static int currentLevel = 0;
 	public int Level { get { return currentLevel; } }
 
 	int score;
@@ -140,11 +140,13 @@ public class GameManager : MonoBehaviour
 		if (isWin) {
 			Debug.Log ("VICTORY");
 			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
+			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
 		}
 		else
 		{
 			Debug.Log ("GAME OVER");
 			AudioManager.getInstance().Play(5);
+			NotificationCenter.DefaultCenter.PostNotification(this, "ShowLoseMenu");
 		}
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
