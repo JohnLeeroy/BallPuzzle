@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,12 +9,16 @@ public class File : MonoBehaviour
 	#region public static void SaveScore( string name, int points )
 	public static void SaveScore( string name, int points )
 	{
+		SimpleAES aes = new SimpleAES();
+
 		// READING STUFF
 		StreamReader reader = new StreamReader( Application.dataPath + "/SaveData/Highscores.json" );
 		
 		string data = reader.ReadLine();
 		reader.Close();
-		
+		Debug.Log( "Before Encryption: " + data );
+		data = aes.DecryptString( data );
+		Debug.Log( "After Encryption: " + data );
 		IList text = (IList)MiniJSON.Json.Deserialize( data );
 		
 		int index = 0;
@@ -48,7 +52,9 @@ public class File : MonoBehaviour
 		
 		string serial = MiniJSON.Json.Serialize(text);
 		
-		print(serial);
+		//print(serial);
+
+		serial = aes.EncryptToString(serial);
 		writer.WriteLine(serial);
 		writer.Flush();
 		writer.Close();
@@ -58,11 +64,14 @@ public class File : MonoBehaviour
 	#region public static IList GetHighscores()
 	public static IList GetHighscores()
 	{
+		SimpleAES aes = new SimpleAES();
 		// READING STUFF
 		StreamReader reader = new StreamReader( Application.dataPath + "/SaveData/Highscores.json" );
 		
 		string data = reader.ReadLine();
 		reader.Close();
+
+		data = aes.DecryptString( data );
 		
 		IList text = (IList)MiniJSON.Json.Deserialize( data );
 		return text;

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Highscores : MonoBehaviour
 {
-	public float fFontSizeRate = 0.1f;
+	private float fFontSizeRate = 0.05f;
 
 	void Start()
 	{
@@ -50,6 +50,6 @@ public class Highscores : MonoBehaviour
 	void Update()
 	{
 		if( Input.GetKeyDown( KeyCode.Return ) )
-			File.SaveScore( "JJJ", 54321 );
+			File.SaveScore( "---", 0 );
 	}
 }

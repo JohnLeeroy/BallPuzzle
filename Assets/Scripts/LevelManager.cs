@@ -6,6 +6,7 @@ public class LevelManager : MonoBehaviour
 {
 	public int levelNum    = 0;
 	public int ballsCount  = 5;
+	public int randomizedNum = 0;
 	public List<Material>  	backgroundMaterials;
 	public GameObject		background;
 	public List<Material>   playbarMaterials;
@@ -27,9 +28,7 @@ public class LevelManager : MonoBehaviour
 	void Awake()
 	{
 		bubbles = new List<Transform> (ballsCount);
-		int tempInt = Random.Range(0,4);
-		background.renderer.material = backgroundMaterials[tempInt];
-		playbar.renderer.material = playbarMaterials[tempInt];
+	
 	}
 
 	void Start () 
@@ -45,6 +44,9 @@ public class LevelManager : MonoBehaviour
 			bubbles.Add(newBubble.transform);
 			//TODO Randomly position bubbles
 		}
+		randomizedNum = Random.Range(0,4);
+		background.renderer.material = backgroundMaterials[randomizedNum];
+		playbar.renderer.material = playbarMaterials[randomizedNum];
 	}
 
 }

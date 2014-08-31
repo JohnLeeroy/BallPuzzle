@@ -49,7 +49,6 @@ public class GameManager : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		Debug.Log ("OnStart " + GetInstanceID());
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
@@ -103,8 +102,6 @@ public class GameManager : MonoBehaviour
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit, 100))
 			{
-				Debug.Log("PRESS TO MAKE");
-
 				bubble.transform.position = new Vector3(hit.point.x, hit.point.y, 0);
 				NotificationCenter.DefaultCenter.PostNotification(this, "OnSpawnPlayerBubble");
 
@@ -179,14 +176,7 @@ public class GameManager : MonoBehaviour
 			Destroy(gameObject);
 			return;
 		}
-
-		Debug.Log ("OnLoadLevel " + GetInstanceID());
 		StopAllCoroutines ();
-		/*NotificationCenter.DefaultCenter.RemoveObserver (this, "Pause");
-		NotificationCenter.DefaultCenter.RemoveObserver (this, "Resume");
-		NotificationCenter.DefaultCenter.RemoveObserver (this, "GameOver");
-		NotificationCenter.DefaultCenter.RemoveObserver (this, "OnBubblePop");
-		*/
 		Time.timeScale = 1;
 		
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
@@ -198,7 +188,5 @@ public class GameManager : MonoBehaviour
 		
 		isGameOver = false;
 		isWin = false;
-
 	}
-
 }
