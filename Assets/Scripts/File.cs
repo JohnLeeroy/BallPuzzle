@@ -2,36 +2,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
-public class PlayerScore
-{
-	public string initials;
-	public int score;
-}
+using System;
 
 public class File : MonoBehaviour 
 {
-
-
+	#region public static void SaveScore( string name, int points )
 	public static void SaveScore( string name, int points )
 	{
-		Debug.Log( "Saving score" );
-
-		List<Dictionary<string,string>> scores = new List<Dictionary<string,string>>();
-
-		Dictionary<string,string> scoreData 	= new Dictionary<string,string>();
-		scoreData["Initials"] 					= name;
-		scoreData["Score"] 						= points.ToString();
-
-		scores.Add(scoreData);
-
+		// READING STUFF
+		StreamReader reader = new StreamReader( Application.dataPath + "/SaveData/Highscores.json" );
+		
+		string data = reader.ReadLine();
+		reader.Close();
+		
+		IList text = (IList)MiniJSON.Json.Deserialize( data );
+		
+		int index = 0;
+		int score;
+		
+		foreach(IDictionary scoreData in text)
+		{
+			score = Convert.ToInt32( scoreData["Score"] );
+			if( points > score )
+				break;
+			else
+				index++;
+		}
+		
+		// If the player made the top ten
+		if( index < text.Count )
+		{
+			// Delete the last score
+			text.RemoveAt( 9 );
+			// Insert the new score at index
+			Dictionary<string,string> highscore = new Dictionary<string,string>();
+			highscore["Initials"] 				= name;
+			highscore["Score"] 					= points.ToString();
+			text.Insert( index, highscore );
+		}
+		
+		Debug.Log( "List length: " + text.Count );
+		
+		// WRITING STUFF
 		StreamWriter writer = new StreamWriter( Application.dataPath + "/SaveData/Highscores.json" );
-
-		string serial = MiniJSON.Json.Serialize(scores);
-
+		
+		string serial = MiniJSON.Json.Serialize(text);
+		
 		print(serial);
 		writer.WriteLine(serial);
 		writer.Flush();
 		writer.Close();
 	}
+	#endregion
+	
+	#region public static IList GetHighscores()
+	public static IList GetHighscores()
+	{
+		// READING STUFF
+		StreamReader reader = new StreamReader( Application.dataPath + "/SaveData/Highscores.json" );
+		
+		string data = reader.ReadLine();
+		reader.Close();
+		
+		IList text = (IList)MiniJSON.Json.Deserialize( data );
+		return text;
+	}
+	#endregion
 }

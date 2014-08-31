@@ -122,11 +122,11 @@ public class GameManager : MonoBehaviour
 
 	void OnBubblePop(NotificationCenter.Notification notif)
 	{
-		Debug.Log ("Bubble Pop: " + notif.sender.name);
 		levelMang.ballsAlive--;
-		Debug.Log ("Balls Left: " + levelMang.ballsAlive);
 		if (levelMang.ballsAlive <= 0) {
 			Debug.Log ("No more Balls, we win");
+			isWin = true;
+			GameOver();
 		}
 		lastBubblePopTime = Time.time;
 	}

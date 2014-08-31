@@ -9,7 +9,7 @@ public class AudioManager : MonoBehaviour {
 	public const int BUTTON_DOWN = 1;
 	public const int BOUNCE = 2;
 	public const int EXPLOSION = 3;
-	public const int DRIP = 4;
+	public const int TOUCHED = 4;
 	public const int END_GAME = 5;
 	
 	private static AudioManager instance;
