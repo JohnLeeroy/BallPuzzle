@@ -22,6 +22,7 @@ public class MainMenuUI : MonoBehaviour {
 			}
 			else if(creditsButton.GetScreenRect().Contains(mousePos))
 			{
+				Application.LoadLevel("Credits");
 				Debug.Log("Credits Button");
 				
 			}

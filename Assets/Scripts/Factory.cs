@@ -37,6 +37,4 @@ public class Factory : MonoBehaviour {
 	{
 		return (GameObject)Instantiate(playerBubblePrefab[ballColor]);
 	}
-	
-
 }
