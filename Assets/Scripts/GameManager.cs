@@ -188,21 +188,29 @@ public class GameManager : MonoBehaviour
 			Destroy(gameObject);
 			return;
 		}
+
 		StopAllCoroutines ();
 		Time.timeScale = 1;
 		
+		if (Application.loadedLevelName != "Arcade")
+			return;
+
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
 		currentState = GameStates.PLAYING;
-		
+
+		if (isWin)
+			currentLevel++;
+		else
+			currentLevel = 0;
+
 		isGameOver = false;
 		isWin = false;
 
 		GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score = score;
-		currentLevel++;
 		//setNextLevelDifficulty ();
 	}
 

@@ -23,8 +23,8 @@ public class GameplayUI : MonoBehaviour {
 		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedLevel");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnSpawnPlayerBubble");
 
-		//NotificationCenter.DefaultCenter.AddObserver (this, "ShowWinMenu");
-		//NotificationCenter.DefaultCenter.AddObserver (this, "ShowLoseMenu");
+		NotificationCenter.DefaultCenter.AddObserver (this, "ShowWinMenu");
+		NotificationCenter.DefaultCenter.AddObserver (this, "ShowLoseMenu");
 
 		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
 		gtLives.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
@@ -72,13 +72,19 @@ public class GameplayUI : MonoBehaviour {
 		if (!isEndGame)
 			return;
 
-		Ray ray;
-		RaycastHit2D hit;
-		if(Physics2D.Raycast(Input.mousePosition, Vector2.up, 100))
-		{
-			Debug.Log(hit.transform.name);
+		if (Input.GetMouseButtonDown (0)) {
+			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast (ray, out hit, 100)) {
+				Debug.Log (hit.transform.name);
+				if(hit.transform.name == "HomeButton")
+					Application.LoadLevel(0);
+				else if(hit.transform.name == "RetryButton")
+				    Application.LoadLevel(Application.loadedLevel);
+				else if(hit.transform.name == "NextButton")
+					Application.LoadLevel(Application.loadedLevel);
+			}
 		}
-		//Physics.Raycast
 	}
 
 }
