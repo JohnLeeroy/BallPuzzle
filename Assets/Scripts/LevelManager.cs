@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour
 	public int ballsCount  = 5;
 	public List<Material>  	backgroundMaterials;
 	public GameObject		background;
+	public List<Material>   playbarMaterials;
+	public GameObject		playbar;
 	public int playerLives = 3;
 
 	List<Transform> bubbles;
@@ -27,7 +29,9 @@ public class LevelManager : MonoBehaviour
 	{
 		Instance = this;
 		bubbles = new List<Transform> (ballsCount);
-		background.renderer.material = backgroundMaterials[Random.Range(0,4)];
+		int tempInt = Random.Range(0,4);
+		background.renderer.material = backgroundMaterials[tempInt];
+		playbar.renderer.material = playbarMaterials[tempInt];
 	}
 
 	void Start () 
