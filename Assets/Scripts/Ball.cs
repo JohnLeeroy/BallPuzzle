@@ -22,6 +22,7 @@ public class Ball : MonoBehaviour
 		bGrowing		= false;
 		bCanGrow		= false;
 		startMoving ();
+		startRotating ();
 	}
 
 	public virtual IEnumerator StartGrowing()
@@ -69,7 +70,18 @@ public class Ball : MonoBehaviour
 			yield return 0;
 		}
 	}
-
+	public void  startRotating()
+	{
+		StartCoroutine("Rotating");
+	}
+	IEnumerator Rotating()
+	{
+		while(!bGrowing)
+		{
+			transform.Rotate (fSpeed,fSpeed,fSpeed);
+			yield return 0;
+		}
+	}
 	public virtual void OnTriggerEnter( Collider other )
 	{
 		// Make other ball start growing
