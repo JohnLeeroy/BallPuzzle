@@ -5,7 +5,6 @@ public class MainMenuButton : MonoBehaviour
 {	
 	void Update () 
 	{
-		Debug.Log( Application.persistentDataPath);
 		if( Input.GetMouseButtonUp( 0 ) )
 		{
 			switch( gameObject.name )
@@ -18,6 +17,9 @@ public class MainMenuButton : MonoBehaviour
 				break;
 			case "CreditsButton":
 				Application.LoadLevel( "Credits" );
+				break;
+			case "RetryButton":
+				Debug.Log( "Retrying" );
 				break;
 			}
 		}
