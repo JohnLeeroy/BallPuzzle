@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (InputController.instance.isTouched && levelMang.playerLives > 0) 
 		{
+			AudioManager.getInstance().Play(4);
 			levelMang.LivesLeft--;
 			GameObject bubble = Factory.getInstance().createPlayerBubble();
 			//bubble.transform.position = Camera.main.

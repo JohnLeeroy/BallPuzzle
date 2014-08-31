@@ -94,12 +94,12 @@ public class Ball : MonoBehaviour
 		else if (other.gameObject.tag == "VWall") 
 		{
 			dir.x *= -1;
-			AudioManager.getInstance().Play(2);
+
 		} 
 		else if (other.gameObject.tag == "HWall") 
 		{
 			dir.y *= -1;
-			AudioManager.getInstance().Play(2);
+	
 		}
 	}
 
