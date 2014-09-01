@@ -50,8 +50,8 @@ public class LevelManager : MonoBehaviour
 		ballsAlive = ballsCount;
 
 		for (int i = 0; i < ballsCount; i++) {
-			newBubble =factory.createBubble(); 
-			newBubble.name = "Bubble";
+			newBubble = factory.createBubble(randomizedNum); 
+			newBubble.transform.name = "Bubble";
 			newBubble.transform.parent = transform;
 			float tempX = Random.Range(-7.2f, 7.2f);
 			float tempY = Random.Range(-4.2f,4f);

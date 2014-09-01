@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 public class Factory : MonoBehaviour {
 
-	//public GameObject bubblePrefab;
-	//public GameObject playerBubblePrefab;
+
 	public List<GameObject> bubblePrefab;
 	public List<GameObject> playerBubblePrefab;
 	private static Factory instance;
-	private int ballColor = 0;
-	
+
 	public static Factory getInstance()
 	{
 		return instance;	
@@ -22,19 +20,15 @@ public class Factory : MonoBehaviour {
 		
 		instance = this;
 	}
-	void Start()
+
+	public GameObject createBubble(int num)
 	{
-		ballColor = LevelManager.getInstance().randomizedNum;
-		Debug.Log(ballColor);
+		return (GameObject)Instantiate(bubblePrefab[num]);
 	}
 
-	public GameObject createBubble()
+	public GameObject createPlayerBubble(int num)
 	{
-		return (GameObject)Instantiate(bubblePrefab[ballColor]);
-	}
 
-	public GameObject createPlayerBubble()
-	{
-		return (GameObject)Instantiate(playerBubblePrefab[ballColor]);
+		return (GameObject)Instantiate(playerBubblePrefab[num]);
 	}
 }

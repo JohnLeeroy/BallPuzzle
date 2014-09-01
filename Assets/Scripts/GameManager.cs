@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
 		{
 			AudioManager.getInstance().Play(4);
 			levelMang.LivesLeft--;
-			GameObject bubble = Factory.getInstance().createPlayerBubble();
+			GameObject bubble = Factory.getInstance().createPlayerBubble(levelMang.randomizedNum);
 			//bubble.transform.position = Camera.main.
 			Ray ray;
 			RaycastHit hit;
