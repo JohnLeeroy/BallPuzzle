@@ -35,7 +35,10 @@ public class GameManager : MonoBehaviour
 	bool isWin = false;
 
 	public static bool isGameOver = false;
-
+	public static bool getGameOver()
+	{
+		return isGameOver;
+	}
 	static int currentLevel = 1;
 	public int Level { get { return currentLevel; } }
 

@@ -72,11 +72,11 @@ public class Ball : MonoBehaviour
 	}
 	public void  startRotating()
 	{
-		StartCoroutine("Rotating");
+		StartCoroutine(Rotating());
 	}
 	IEnumerator Rotating()
 	{
-		while(!bGrowing)
+		while(!bGrowing && !GameManager.getGameOver())
 		{
 			transform.Rotate (fSpeed*dir.x,-fSpeed*dir.y,0);
 			yield return 0;
