@@ -12,10 +12,15 @@ public class Credits : MonoBehaviour
 
 	IEnumerator RollCredits()
 	{
-		while( transform.position.y < 20.0f )
+		while(true)
 		{
-			transform.position += new Vector3( 0.0f, fScrollSpeed * Time.deltaTime, 0.0f );
-			yield return null;
+			while( transform.position.y < 20.0f )
+			{
+				transform.position += new Vector3( 0.0f, fScrollSpeed * Time.deltaTime, 0.0f );
+				yield return null;
+			}
+
+			transform.position = new Vector3(0, -17, 0);
 		}
 	}
 }
