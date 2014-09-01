@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (isWin) {
 			Debug.Log ("VICTORY");
-			AudioManager.getInstance().Play(5);
+			AudioManager.getInstance().Play(0);
 			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
 			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
 		}
