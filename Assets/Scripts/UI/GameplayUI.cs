@@ -34,7 +34,7 @@ public class GameplayUI : MonoBehaviour {
 
 		gtLives.text = "Lives " + levelManager.LivesLeft;
 		gtLevel.text = "Level " + GameManager.getInstance ().Level;
-		gtScore.text = "Score " + GameManager.getInstance ().Score;
+		gtScore.text =  GameManager.getInstance ().Score.ToString();
 	}
 
 	void ShowWinMenu()
@@ -80,9 +80,14 @@ public class GameplayUI : MonoBehaviour {
 				if(hit.transform.name == "HomeButton")
 					Application.LoadLevel(0);
 				else if(hit.transform.name == "RetryButton")
+				{
+					GameManager.getInstance().Score = 0;
 				    Application.LoadLevel(Application.loadedLevel);
+				}
 				else if(hit.transform.name == "NextButton")
+				{
 					Application.LoadLevel(Application.loadedLevel);
+				}
 			}
 		}
 	}

@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 	public int Level { get { return currentLevel; } }
 
 	int score;
-	public int Score { get { return score; } }
+	public int Score { get { return score; } set {score = value;}}
 
 	void Awake()
 	{
@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (isWin) {
 			Debug.Log ("VICTORY");
+			AudioManager.getInstance().Play(5);
 			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
 			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
 		}
