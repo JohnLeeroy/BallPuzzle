@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
 	public static bool isGameOver = false;
 
-	static int currentLevel = 0;
+	static int currentLevel = 1;
 	public int Level { get { return currentLevel; } }
 
 	int score;
@@ -71,17 +71,6 @@ public class GameManager : MonoBehaviour
 	{
 		CatchState();
 		HandleInput ();
-
-		/*
-		 * if(levelMang.LivesLeft > 0)
-		{
-			StateHandle = GameStates.RESTARTING;
-		}
-		else
-		{
-			StateHandle = GameStates.DEAD;
-		}
-		*/
 	}
 
 	void CatchState()
@@ -205,7 +194,7 @@ public class GameManager : MonoBehaviour
 		if (isWin)
 			currentLevel++;
 		else
-			currentLevel = 0;
+			currentLevel = 1;
 
 		isGameOver = false;
 		isWin = false;
