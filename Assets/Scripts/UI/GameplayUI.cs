@@ -6,9 +6,12 @@ public class GameplayUI : MonoBehaviour {
 	public GUIText gtScore;
 	public GUIText gtLives;
 	public GUIText gtLevel;
+	public GUIText gtScoreText;
+
 
 	public GameObject winMenu;
 	public GameObject loseMenu;
+	public GameObject highscoreMenu;
 
 	
 	//public PauseModal pauseModal;
@@ -27,10 +30,10 @@ public class GameplayUI : MonoBehaviour {
 		NotificationCenter.DefaultCenter.AddObserver (this, "ShowLoseMenu");
 
 		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
+		gtScoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
 		gtLives.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
 		gtLevel.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
 		levelManager = GameObject.Find ("LevelManager").GetComponent<LevelManager> ();
-		//GameManager.
 
 		gtLives.text = "Lives " + levelManager.LivesLeft;
 		gtLevel.text = "Level " + GameManager.getInstance ().Level;
