@@ -6,6 +6,8 @@ public class MainMenuUI : MonoBehaviour {
 	public GUITexture startButton;
 	public GUITexture creditsButton;
 	public GUITexture leaderboardButton;
+	
+	private bool starting = false;
 	// Use this for initialization
 	void Start () {
 	
@@ -18,8 +20,9 @@ public class MainMenuUI : MonoBehaviour {
 			if( startButton.GetScreenRect().Contains(mousePos))
 			{
 				AudioManager.getInstance().Play(1);
+				starting = true;
 				Debug.Log("Start Button");
-				Application.LoadLevel("Arcade");
+				
 			}
 			else if(creditsButton.GetScreenRect().Contains(mousePos))
 			{
@@ -34,6 +37,11 @@ public class MainMenuUI : MonoBehaviour {
 				Application.LoadLevel("Highscores");
 				Debug.Log("Leaderboard Button");
 			}
+		}
+		
+		if(starting && Input.touchCount == 0)
+		{
+			Application.LoadLevel("Arcade");
 		}
 	}
 }
