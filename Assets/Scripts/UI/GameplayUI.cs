@@ -10,7 +10,7 @@ public class GameplayUI : MonoBehaviour {
 	public GameObject winMenu;
 	public GameObject loseMenu;
 
-	
+	private bool restarting = false;
 	//public PauseModal pauseModal;
 	// Use this for initialization
 	int fontSize = 24;
@@ -82,13 +82,19 @@ public class GameplayUI : MonoBehaviour {
 				else if(hit.transform.name == "RetryButton")
 				{
 					GameManager.getInstance().Score = 0;
-				    Application.LoadLevel(Application.loadedLevel);
+				    restarting = true;
 				}
 				else if(hit.transform.name == "NextButton")
 				{
-					Application.LoadLevel(Application.loadedLevel);
+					restarting = true;
 				}
 			}
+		}
+		
+		if(restarting && Input.touchCount == 0)
+		{
+			restarting = false;
+			Application.LoadLevel(Application.loadedLevel);
 		}
 	}
 
