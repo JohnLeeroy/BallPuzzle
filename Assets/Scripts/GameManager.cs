@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 		set{currentState = value;}
 	}
 
-	static private GameManager instance;
+	private static GameManager instance;
 	public static GameManager getInstance()
 	{
 		return instance;
@@ -33,12 +33,8 @@ public class GameManager : MonoBehaviour
 	private float lastBubblePopTime; 
 
 	bool isWin = false;
-
 	public static bool isGameOver = false;
-	public static bool getGameOver()
-	{
-		return isGameOver;
-	}
+
 	static int currentLevel = 1;
 	public int Level { get { return currentLevel; } }
 
@@ -55,6 +51,7 @@ public class GameManager : MonoBehaviour
 		instance = this;
 		DontDestroyOnLoad (gameObject);
 	}
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -63,6 +60,8 @@ public class GameManager : MonoBehaviour
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
+		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
+		
 		currentState = GameStates.PLAYING;
 		AudioManager.getInstance().Play(0);
 		isGameOver = false;
@@ -112,7 +111,6 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-
 	void Pause()
 	{
 		prevState = currentState;
@@ -129,17 +127,31 @@ public class GameManager : MonoBehaviour
 
 	void GameOver()
 	{
+		Leaderboard leaderboard = Leaderboard.Instance;
+		int rank = leaderboard.getScoreRank (score);
+		Debug.Log ("Rank " + rank);
+		Hashtable table = new Hashtable ();
+		table ["rank"] = rank;
+		     
+		leaderboard.postScore (score);
+
 		if (isWin) {
 			Debug.Log ("VICTORY");
 			AudioManager.getInstance().Play(0);
 			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
-			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
+			if(rank != -1)
+				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLeaderboard", table);
+			else
+				NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
 		}
 		else
 		{
 			Debug.Log ("GAME OVER");
 			AudioManager.getInstance().Play(5);
-			NotificationCenter.DefaultCenter.PostNotification(this, "ShowLoseMenu");
+			if(rank != -1)
+				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLeaderboard", table);
+			else
+				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLoseMenu");
 		}
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
@@ -212,10 +224,10 @@ public class GameManager : MonoBehaviour
 
 	void setNextLevelDifficulty()
 	{
-		
 		//levelMang.ballsCount = baseBubbleCount + Formula(currentLevel);
 		//Debug.Log("Ball Start Count " + levelMang.ballsCount);
 	}
+
 
 	int Formula(int n)
 	{
@@ -230,5 +242,10 @@ public class GameManager : MonoBehaviour
 			}
 		}
 		return sum;
+	}
+
+	void UpdatedScore(NotificationCenter.Notification notif)
+	{
+		score = (int)notif.data ["score"]; 
 	}
 }

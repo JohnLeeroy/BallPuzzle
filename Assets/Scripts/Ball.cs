@@ -76,7 +76,7 @@ public class Ball : MonoBehaviour
 	}
 	IEnumerator Rotating()
 	{
-		while(!bGrowing && !GameManager.getGameOver())
+		while(!bGrowing && !GameManager.isGameOver)
 		{
 			transform.Rotate (fSpeed*dir.x,-fSpeed*dir.y,0);
 			yield return 0;

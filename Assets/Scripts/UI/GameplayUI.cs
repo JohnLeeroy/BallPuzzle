@@ -11,7 +11,7 @@ public class GameplayUI : MonoBehaviour {
 
 	public GameObject winMenu;
 	public GameObject loseMenu;
-	public GameObject highscoreMenu;
+	public GameObject leaderboardMenu;
 
 	private bool restarting = false;
 	//public PauseModal pauseModal;
@@ -28,6 +28,7 @@ public class GameplayUI : MonoBehaviour {
 
 		NotificationCenter.DefaultCenter.AddObserver (this, "ShowWinMenu");
 		NotificationCenter.DefaultCenter.AddObserver (this, "ShowLoseMenu");
+		NotificationCenter.DefaultCenter.AddObserver (this, "ShowLeaderboard");
 
 		gtScore.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
 		gtScoreText.fontSize = Mathf.Min(Screen.height,Screen.width)/fontSize;
@@ -54,6 +55,17 @@ public class GameplayUI : MonoBehaviour {
 		isEndGame = true;
 	}
 
+	TextMesh editScoreText;
+	void ShowLeaderboard(NotificationCenter.Notification notif)
+	{
+		leaderboardMenu.SetActive (true);
+		isEndGame = true;
+
+		int rank = (int)notif.data ["rank"];
+		editScoreText = leaderboardMenu.GetComponent<LeaderboardModal> ().rows [rank].name;
+		StartCoroutine (HandleLeaderboard (rank));
+	}
+
 	void UpdatedScore(NotificationCenter.Notification notif)
 	{
 		gtScore.text = notif.data ["score"].ToString(); 
@@ -69,6 +81,22 @@ public class GameplayUI : MonoBehaviour {
 		gtLives.text = "Lives " + levelManager.LivesLeft;
 	}
 
+
+	IEnumerator HandleLeaderboard(int rank)
+	{
+		TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open ("");
+		while (keyboard.active) {
+			if(keyboard.text.Length > 3)
+			{
+				keyboard.text = keyboard.text.Substring(0, 3);
+			}
+			editScoreText.text = keyboard.text;
+			yield return 0;
+		}
+		editScoreText.text = keyboard.text;
+		Leaderboard.Instance.records [rank].name = editScoreText.text;
+		FileScript.SaveLeaderboard ();
+	}
 
 	void Update()
 	{
