@@ -106,6 +106,7 @@ public class GameplayUI : MonoBehaviour {
 		
 #endif
 		Leaderboard.Instance.records [rank].name = editScoreText.text;
+		//Debug.Log ("Rank " + rank + "  |   " + name);
 		FileScript.SaveLeaderboard ();
 	}
 

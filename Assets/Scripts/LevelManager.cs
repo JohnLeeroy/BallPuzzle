@@ -9,7 +9,7 @@ public class LevelManager : MonoBehaviour
 	public int randomizedNum = 0;
 
 	public List<Material>  	backgroundMaterials;
-	public GameObject		background;
+	public Renderer[]		backgrounds;
 	public List<Texture2D>   playbarTextures;
 	public GUITexture		playbar;
 
@@ -41,7 +41,9 @@ public class LevelManager : MonoBehaviour
 		bubbles = new List<Transform> (ballsCount);
 
 		randomizedNum = Random.Range(0,4);
-		background.renderer.material = backgroundMaterials[randomizedNum];
+		foreach (Renderer rend in backgrounds) {
+			rend.material = backgroundMaterials[randomizedNum];
+		}
 		playbar.texture = playbarTextures [randomizedNum];
 	}
 
