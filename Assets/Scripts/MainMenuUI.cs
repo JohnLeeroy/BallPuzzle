@@ -9,7 +9,7 @@ public class MainMenuUI : MonoBehaviour {
 	
 	private bool starting = false;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		#if UNITY_WEBPLAYER
 				GameObject.Find("LeaderboardButton").SetActive(false);
 		#endif

@@ -134,6 +134,7 @@ public class GameManager : MonoBehaviour
 			Debug.Log ("GAME OVER " + score);
 			AudioManager.getInstance().Play(5);
 
+			KongregateAPI.Submit("Score" , score);
 			//Debug.Log("Total Score " + score);
 			int rank = leaderboard.getScoreRank (score);
 
