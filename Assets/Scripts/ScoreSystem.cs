@@ -3,7 +3,11 @@ using System.Collections;
 
 public class ScoreSystem : MonoBehaviour {
 
+	public static int highestCombo = 0;	//used for analytics
+
 	public int baseBubbleValue = 100;
+	public int baseLifeLeftoverBonus = 1000;
+
 	public int[] chainComboMultipliers;
 
 	int chainCounter = 0;	//number of chained bubbles per SINGLE touch
@@ -34,9 +38,10 @@ public class ScoreSystem : MonoBehaviour {
 	void OnBubblePop()
 	{
 		chainCounter++;
-		//score += baseBubbleValue * chainComboMultipliers [chainCounter];
+		if (chainCounter > highestCombo)
+			highestCombo = chainCounter;
+
 		setScore (score + baseBubbleValue * chainComboMultipliers [chainCounter]);
-		//Debug.Log ("Score: " + score);
 	}
 
 	public void setScore(int newScore)
@@ -47,6 +52,13 @@ public class ScoreSystem : MonoBehaviour {
 		NotificationCenter.DefaultCenter.PostNotification (this, "UpdatedScore", data);
 	}
 
+	public void applyLifeLeftoverBonus(int livesLeft)
+	{
+		if (livesLeft <= 0)
+			return;
+
+		setScore (score + livesLeft * baseLifeLeftoverBonus);
+	}
 	
 	void OnLevelWasLoaded()
 	{

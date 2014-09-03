@@ -12,7 +12,9 @@ public class LevelManager : MonoBehaviour
 	public GameObject		background;
 	public List<Texture2D>   playbarTextures;
 	public GUITexture		playbar;
-	public int playerLives = 3;
+
+	public int playerStartLives = 3;
+	private int playerLives = 3;
 	public int ballsAlive = 0;
 	private static LevelManager instance;
 	private Factory	factory;
@@ -59,7 +61,7 @@ public class LevelManager : MonoBehaviour
 			bubbles.Add(newBubble.transform);
 
 		}
-
+		playerLives = playerStartLives;
 	}
 
 }

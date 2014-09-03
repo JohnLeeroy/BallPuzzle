@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 		set{currentState = value;}
 	}
 
+	ScoreSystem scoreSystem;
+
 	private static GameManager instance;
 	public static GameManager getInstance()
 	{
@@ -41,6 +43,11 @@ public class GameManager : MonoBehaviour
 	int score;
 	public int Score { get { return score; } set {score = value;}}
 
+	//Analytics
+	GameSession gameSession;
+	static int winCount = 0; 	//tracks wins per session
+	static int loseCount = 0; 	//tracks loses per session
+
 	void Awake()
 	{
 		if (instance != null) {
@@ -50,46 +57,42 @@ public class GameManager : MonoBehaviour
 
 		instance = this;
 		DontDestroyOnLoad (gameObject);
+
+		gameSession = new GameSession ();
 	}
 
-	// Use this for initialization
-	void Start () 
+	void Start()
 	{
+		scoreSystem = GameObject.Find ("ScoreSystem").GetComponent<ScoreSystem> ();
+		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+	}
+
+	void init()
+	{
+		scoreSystem = GameObject.Find ("ScoreSystem").GetComponent<ScoreSystem> ();
 		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
 		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
-		//NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
-		
 		currentState = GameStates.PLAYING;
-		AudioManager.getInstance().Play(0);
+		
 		isGameOver = false;
 		isWin = false;
+		
+		AudioManager.getInstance().Play(0);
+		
+		gameSession.start ();
 	}
 
-	// Update is called once per frame
 	void Update () 
 	{
-		CatchState();
 		HandleInput ();
-	}
-
-	void CatchState()
-	{
-		switch(currentState)
-		{
-		case GameStates.INTRO:{break;}
-		case GameStates.ALIVE:{break;}
-		case GameStates.PLAYING:{break;}
-		case GameStates.DEAD:{break;}
-		case GameStates.RESTARTING:{break;}
-		}
 	}
 
 	void HandleInput()
 	{
-		if (InputController.instance.isTouched && levelMang.playerLives > 0) 
+		if (InputController.instance.isTouched && levelMang.LivesLeft > 0) 
 		{
 			AudioManager.getInstance().Play(4);
 			levelMang.LivesLeft--;
@@ -105,43 +108,33 @@ public class GameManager : MonoBehaviour
 
 				lastBubblePopTime = Time.time; 		//reset the pop timer when the player spawns a bubble
 
-				if(levelMang.playerLives == 0)
+				if(levelMang.LivesLeft == 0)
 					StartCoroutine ("CR_OnLastPlayerBubbleSpawn");
 			}
 		}
-	}
-
-	void Pause()
-	{
-		prevState = currentState;
-		currentState = GameStates.PAUSED;
-		Time.timeScale = 0;
-	}
-
-	void Resume()
-	{
-		currentState = prevState;
-		Debug.Log (currentState.ToString ());
-		Time.timeScale = 1;
 	}
 
 	void GameOver()
 	{
 		StopAllCoroutines ();
 		Leaderboard leaderboard = Leaderboard.Instance;
-		score += GameObject.Find ("ScoreSystem").GetComponent<ScoreSystem> ().score;
+
+		int triesLeft = levelMang.LivesLeft;
+		scoreSystem.applyLifeLeftoverBonus (triesLeft);
+
+		score += scoreSystem.score;
 		if (isWin) {
 			Debug.Log ("VICTORY " + score);
 			AudioManager.getInstance().Play(0);
 			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
+			winCount++;
 		}
 		else
 		{
 			Debug.Log ("GAME OVER " + score);
 			AudioManager.getInstance().Play(5);
 
-
-			Debug.Log("Total Score " + score);
+			//Debug.Log("Total Score " + score);
 			int rank = leaderboard.getScoreRank (score);
 
 			Hashtable table = new Hashtable ();
@@ -154,12 +147,12 @@ public class GameManager : MonoBehaviour
 				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLeaderboard", table);
 			else
 				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLoseMenu");
+			loseCount++;
 		}
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
 
-		Debug.Log ("GO: " + score);
-		
+		gameSession.end (isWin, currentLevel, score, levelMang.playerStartLives - levelMang.LivesLeft);
 	}
 
 	void OnBubblePop(NotificationCenter.Notification notif)
@@ -190,6 +183,11 @@ public class GameManager : MonoBehaviour
 	void OnApplicationQuit()
 	{
 		isGameOver = true;
+		Splyt.Transaction globalData = Splyt.Instrumentation.Transaction("SessionGlobal");
+		globalData.setProperty ("WinCount", winCount);
+		globalData.setProperty ("LoseCount", loseCount);
+		globalData.setProperty ("HighestCombo", ScoreSystem.highestCombo);
+		globalData.beginAndEnd ();
 	}
 
 	void OnLevelWasLoaded()
@@ -205,13 +203,6 @@ public class GameManager : MonoBehaviour
 		if (Application.loadedLevelName != "Arcade")
 			return;
 
-		levelMang = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-		NotificationCenter.DefaultCenter.AddObserver (this, "Pause");
-		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
-		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
-		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
-		currentState = GameStates.PLAYING;
-
 		if (isWin)
 		{
 			currentLevel++;
@@ -222,13 +213,11 @@ public class GameManager : MonoBehaviour
 		{
 			currentLevel = 1;
 			score = 0;
-			Debug.Log("SAJLGKJSDGLKJDSGLKJGDSLDGSDGSG");
 		}
-		
-		isGameOver = false;
-		isWin = false;
-		//setNextLevelDifficulty ();
+
 		Debug.Log ("Score at the end of round " + score);
+		
+		init ();
 	}
 
 	const int baseBubbleCount = 5;
@@ -238,5 +227,19 @@ public class GameManager : MonoBehaviour
 	{
 		//levelMang.ballsCount = baseBubbleCount + Formula(currentLevel);
 		//Debug.Log("Ball Start Count " + levelMang.ballsCount);
+	}
+	
+	void Pause()
+	{
+		prevState = currentState;
+		currentState = GameStates.PAUSED;
+		Time.timeScale = 0;
+	}
+	
+	void Resume()
+	{
+		currentState = prevState;
+		Debug.Log (currentState.ToString ());
+		Time.timeScale = 1;
 	}
 }

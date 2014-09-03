@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Splyt;
 
 public class Analytics : MonoBehaviour {
 
@@ -7,6 +9,10 @@ public class Analytics : MonoBehaviour {
 
 	public static Analytics Instance{ get { return instance; } }
 
+	EntityInfo user;
+	EntityInfo device;
+	static string scene;
+	
 	void Awake()
 	{
 		if (instance != null) {
@@ -14,47 +20,50 @@ public class Analytics : MonoBehaviour {
 			return;
 		}
 		instance = this;
+
+		initUserInfo ();
+		initDeviceInfo ();
 		//personal17153-neonburst-prod
 		Splyt.InitParams initParams = Splyt.InitParams.create(
-			"personal17153-neonburst-test"								// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
+			"personal17153-neonburst-test",
+			device,
+			user// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
 			//,userInfo: Splyt.EntityInfo.createUserInfo("joe")		// (optional) Only necessary if user info is known at startup, otherwise use registerUser later
 			//,logEnabled: true										// (optional) Typically only set to true during development
 			);
 
-		Splyt.Core.init(initParams, delegate(Splyt.Error initError) 
+		Core.init(initParams, delegate(Error initError) 
 		                {
-			if(Splyt.Error.Success == initError)
+			if(Error.Success == initError)
 				Debug.Log("onSplytInitComplete: " + initError.ToString());
 			else
 				Debug.LogError("onSplytInitComplete: " + initError.ToString());
-			
-
-			/*
-			// in this contrived case, we learn about the user just after init - generally this would be triggered by a user action (login?)
-			Splyt.EntityInfo user = Splyt.EntityInfo.createUserInfo(
-				"joe",
-				properties: new Dictionary<string, object> { { "funguy", true }, { "favorite team", "Sweepers" } }
-			);
-			
-			Splyt.Core.registerUser(user, delegate(Splyt.Error registerError) {
-				if(Splyt.Error.Success == registerError)
-					Debug.Log("onSplytRegisterUserComplete: " + registerError.ToString());
-				else
-					Debug.LogError("onSplytRegisterUserComplete: " + registerError.ToString());
-				
-				OnGameReady();
-			});
-			*/
 		});
 
 		Splyt.Plugins.Session.Transaction().begin();
-
 		DontDestroyOnLoad (gameObject);
+
+		scene = Application.loadedLevelName;
+		Splyt.Instrumentation.Transaction(scene).begin();
 	}
 
-	void test()
+	void initUserInfo()
 	{
+		user = EntityInfo.createUserInfo (SystemInfo.deviceUniqueIdentifier);
+	}
 
+	void initDeviceInfo()
+	{
+		Dictionary<string, object> data = new Dictionary<string, object> ();
+		data ["Model"] = SystemInfo.deviceModel;
+		data ["Type"] = SystemInfo.deviceType;
+		data ["OS"] = SystemInfo.operatingSystem;
+
+		data ["Graphics"] = SystemInfo.graphicsDeviceName;
+		data ["GraphicsVersion"] = SystemInfo.graphicsDeviceVersion;
+
+		data ["ProcessorType"] = SystemInfo.processorType;
+		device = EntityInfo.createDeviceInfo (data);
 	}
 
 	void OnApplicationPause(bool pauseStatus)
@@ -75,7 +84,6 @@ public class Analytics : MonoBehaviour {
 	void OnApplicationQuit()
 	{
 		Splyt.Plugins.Session.Transaction ().end ();
-		Splyt.Instrumentation.Transaction ("SDFFSD").beginAndEnd ();
 		/*
 		Splyt.Instrumentation.Transaction("game")
 			.setProperties(new Dictionary<string, object> {
@@ -117,5 +125,15 @@ public class Analytics : MonoBehaviour {
 	private void GetVarExample()
 	{
 		//mGameCost = Splyt.Tuning.getVar("newGameCost", 100);
+	}
+
+	void OnLevelWasLoaded(int level) {
+		if(scene.Equals(Application.loadedLevelName))
+			return;
+
+		Splyt.Instrumentation.Transaction(scene).end();
+
+		scene = Application.loadedLevelName;
+		Splyt.Instrumentation.Transaction(scene).begin();
 	}
 }
