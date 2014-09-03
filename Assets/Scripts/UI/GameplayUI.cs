@@ -111,7 +111,7 @@ public class GameplayUI : MonoBehaviour {
 		//Debug.Log ("Rank " + rank + "  |   " + name);
 		FileScript.SaveLeaderboard ();
 #endif
-		
+		yield return 0;	
 	}
 
 	void Update()
