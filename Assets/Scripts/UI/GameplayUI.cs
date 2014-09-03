@@ -84,6 +84,15 @@ public class GameplayUI : MonoBehaviour {
 
 	IEnumerator HandleLeaderboard(int rank)
 	{
+#if UNITY_EDITOR ||UNITY_EDITOR_OSX
+		/*while (editScoreText.text.Length < 3) {
+			if(Input.anyKeyDown)
+				editScoreText.text = Input.inputString;
+			yield return 0;
+		}*/
+		yield return 0;
+		editScoreText.text = Random.Range(100, 999).ToString();
+#else
 		TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open ("");
 		while (keyboard.active) {
 			if(keyboard.text.Length > 3)
@@ -94,6 +103,8 @@ public class GameplayUI : MonoBehaviour {
 			yield return 0;
 		}
 		editScoreText.text = keyboard.text;
+		
+#endif
 		Leaderboard.Instance.records [rank].name = editScoreText.text;
 		FileScript.SaveLeaderboard ();
 	}
@@ -112,7 +123,7 @@ public class GameplayUI : MonoBehaviour {
 					Application.LoadLevel(0);
 				else if(hit.transform.name == "RetryButton")
 				{
-					GameManager.getInstance().Score = 0;
+					//GameManager.getInstance().Score = 0;
 				    restarting = true;
 				}
 				else if(hit.transform.name == "NextButton")

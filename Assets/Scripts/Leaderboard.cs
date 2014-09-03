@@ -42,7 +42,7 @@ public class Leaderboard {
 	{
 		int scoreCount = records.Count;
 		for (int i = 0; i < scoreCount; i++) {
-			Debug.Log("Compare " + score + " | " + records[i].score);
+			//Debug.Log("Compare " + score + " | " + records[i].score);
 			if(score > records[i].score){
 				return i;
 			}
@@ -59,7 +59,6 @@ public class Leaderboard {
 		int scoreCount = records.Count;
 
 		for (int i = (scoreCount-1); i > rank; i--) {
-			Debug.Log("INDEX " + i);
 			records[i].score = records[i-1].score;
 		}
 		records [rank].score = score;

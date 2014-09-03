@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
 		NotificationCenter.DefaultCenter.AddObserver (this, "Resume");
 		NotificationCenter.DefaultCenter.AddObserver (this, "GameOver");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnBubblePop");
-		NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
+		//NotificationCenter.DefaultCenter.AddObserver (this, "UpdatedScore");
 		
 		currentState = GameStates.PLAYING;
 		AudioManager.getInstance().Play(0);
@@ -127,27 +127,29 @@ public class GameManager : MonoBehaviour
 
 	void GameOver()
 	{
+		StopAllCoroutines ();
 		Leaderboard leaderboard = Leaderboard.Instance;
-		int rank = leaderboard.getScoreRank (score);
-		Debug.Log ("Rank " + rank);
-		Hashtable table = new Hashtable ();
-		table ["rank"] = rank;
-		     
-		leaderboard.postScore (score);
-
+		score += GameObject.Find ("ScoreSystem").GetComponent<ScoreSystem> ().score;
 		if (isWin) {
-			Debug.Log ("VICTORY");
+			Debug.Log ("VICTORY " + score);
 			AudioManager.getInstance().Play(0);
-			score = GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score;
-			if(rank != -1)
-				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLeaderboard", table);
-			else
-				NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
+			NotificationCenter.DefaultCenter.PostNotification(this, "ShowWinMenu");
 		}
 		else
 		{
-			Debug.Log ("GAME OVER");
+			Debug.Log ("GAME OVER " + score);
 			AudioManager.getInstance().Play(5);
+
+
+			Debug.Log("Total Score " + score);
+			int rank = leaderboard.getScoreRank (score);
+
+			Hashtable table = new Hashtable ();
+			table ["rank"] = rank;
+
+			Debug.Log ("Rank " + rank);
+			leaderboard.postScore (score);
+			
 			if(rank != -1)
 				NotificationCenter.DefaultCenter.PostNotification(this, "ShowLeaderboard", table);
 			else
@@ -155,6 +157,9 @@ public class GameManager : MonoBehaviour
 		}
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
+
+		Debug.Log ("GO: " + score);
+		
 	}
 
 	void OnBubblePop(NotificationCenter.Notification notif)
@@ -208,15 +213,22 @@ public class GameManager : MonoBehaviour
 		currentState = GameStates.PLAYING;
 
 		if (isWin)
+		{
 			currentLevel++;
+			GameObject.Find ("ScoreSystem").GetComponent<ScoreSystem> ().setScore(score);
+			score = 0;
+		}
 		else
+		{
 			currentLevel = 1;
-
+			score = 0;
+			Debug.Log("SAJLGKJSDGLKJDSGLKJGDSLDGSDGSG");
+		}
+		
 		isGameOver = false;
 		isWin = false;
-
-		GameObject.Find("ScoreSystem").GetComponent<ScoreSystem>().score = score;
 		//setNextLevelDifficulty ();
+		Debug.Log ("Score at the end of round " + score);
 	}
 
 	const int baseBubbleCount = 5;
@@ -226,26 +238,5 @@ public class GameManager : MonoBehaviour
 	{
 		//levelMang.ballsCount = baseBubbleCount + Formula(currentLevel);
 		//Debug.Log("Ball Start Count " + levelMang.ballsCount);
-	}
-
-
-	int Formula(int n)
-	{
-		int sum = 0;
-		int current = n;
-		for (int i = n; n > 0; n--) {
-			current = n;
-			while(current > 0)
-			{
-				sum += n;
-				current--;
-			}
-		}
-		return sum;
-	}
-
-	void UpdatedScore(NotificationCenter.Notification notif)
-	{
-		score = (int)notif.data ["score"]; 
 	}
 }

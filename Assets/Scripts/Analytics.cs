@@ -4,6 +4,9 @@ using System.Collections;
 public class Analytics : MonoBehaviour {
 
 	private static Analytics instance;
+
+	public static Analytics Instance{ get { return instance; } }
+
 	void Awake()
 	{
 		if (instance != null) {
@@ -11,9 +14,9 @@ public class Analytics : MonoBehaviour {
 			return;
 		}
 		instance = this;
-
+		//personal17153-neonburst-prod
 		Splyt.InitParams initParams = Splyt.InitParams.create(
-			"personal17153-test"								// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
+			"personal17153-neonburst-test"								// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
 			//,userInfo: Splyt.EntityInfo.createUserInfo("joe")		// (optional) Only necessary if user info is known at startup, otherwise use registerUser later
 			//,logEnabled: true										// (optional) Typically only set to true during development
 			);
@@ -49,6 +52,11 @@ public class Analytics : MonoBehaviour {
 		DontDestroyOnLoad (gameObject);
 	}
 
+	void test()
+	{
+
+	}
+
 	void OnApplicationPause(bool pauseStatus)
 	{
 		if (pauseStatus)
@@ -67,6 +75,7 @@ public class Analytics : MonoBehaviour {
 	void OnApplicationQuit()
 	{
 		Splyt.Plugins.Session.Transaction ().end ();
+		Splyt.Instrumentation.Transaction ("SDFFSD").beginAndEnd ();
 		/*
 		Splyt.Instrumentation.Transaction("game")
 			.setProperties(new Dictionary<string, object> {
@@ -75,6 +84,8 @@ public class Analytics : MonoBehaviour {
 				{ "winQuality", _GetScore() }
 			}).end();
 			*/
+
+		//Splyt.Instrumentation.
 	}
 
 	void PurchaseExample()

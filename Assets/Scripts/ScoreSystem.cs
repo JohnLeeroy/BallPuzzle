@@ -11,10 +11,13 @@ public class ScoreSystem : MonoBehaviour {
 
 	public int score = 0;
 
-	void Start () {
+	IEnumerator Start () {
 		NotificationCenter.DefaultCenter.AddObserver(this, "OnSpawnPlayerBubble");
 		NotificationCenter.DefaultCenter.AddObserver(this, "OnBubblePop");
 		NotificationCenter.DefaultCenter.AddObserver (this, "OnPlayerBubblePop");
+
+		yield return 0;
+		setScore (score); // update UI
 	}
 
 	void OnSpawnPlayerBubble()
@@ -31,12 +34,23 @@ public class ScoreSystem : MonoBehaviour {
 	void OnBubblePop()
 	{
 		chainCounter++;
-		score += baseBubbleValue * chainComboMultipliers [chainCounter];
-
+		//score += baseBubbleValue * chainComboMultipliers [chainCounter];
+		setScore (score + baseBubbleValue * chainComboMultipliers [chainCounter]);
 		//Debug.Log ("Score: " + score);
+	}
+
+	public void setScore(int newScore)
+	{
+		score = newScore;
 		Hashtable data = new Hashtable();
 		data ["score"] = score;
 		NotificationCenter.DefaultCenter.PostNotification (this, "UpdatedScore", data);
 	}
 
+	
+	void OnLevelWasLoaded()
+	{
+		//Debug.Log ("Setting score to ... " + GameManager.getInstance ().Score);
+		//setScore (GameManager.getInstance ().Score);
+	}
 }
