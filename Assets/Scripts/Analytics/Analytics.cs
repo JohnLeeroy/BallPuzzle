@@ -6,9 +6,9 @@ using Splyt;
 public class Analytics : MonoBehaviour {
 
 	private static Analytics instance;
-
 	public static Analytics Instance{ get { return instance; } }
-
+	public static bool isTuningEnabled = false;
+	
 	EntityInfo user;
 	EntityInfo device;
 	static string scene;
@@ -27,8 +27,7 @@ public class Analytics : MonoBehaviour {
 		Splyt.InitParams initParams = Splyt.InitParams.create(
 			"personal17153-neonburst-test",
 			device,
-			user// (required) Customer ID from the Splyt team.  If you don't have one, contact them.
-			//,userInfo: Splyt.EntityInfo.createUserInfo("joe")		// (optional) Only necessary if user info is known at startup, otherwise use registerUser later
+			user
 			//,logEnabled: true										// (optional) Typically only set to true during development
 			);
 
@@ -38,6 +37,10 @@ public class Analytics : MonoBehaviour {
 				Debug.Log("onSplytInitComplete: " + initError.ToString());
 			else
 				Debug.LogError("onSplytInitComplete: " + initError.ToString());
+
+			
+			isTuningEnabled = (Tuning.getVar ("Enable_Tuning", 0) == 1) ? true : false;
+			Debug.Log ("Is Tuning Enabled? " + isTuningEnabled);
 		});
 
 		Splyt.Plugins.Session.Transaction().begin();

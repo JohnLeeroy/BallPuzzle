@@ -49,6 +49,14 @@ public class LevelManager : MonoBehaviour
 	{
 		factory = Factory.getInstance ();
 		GameObject newBubble;
+		
+		if (Analytics.isTuningEnabled) {
+			ballsCount = Splyt.Tuning.getVar("Stage_Start_Bubbles", 15);
+			playerStartLives = Splyt.Tuning.getVar("Stage_Start_Lives", 5);
+		}
+	
+		playerLives = playerStartLives;
+
 		ballsAlive = ballsCount;
 
 		for (int i = 0; i < ballsCount; i++) {
@@ -59,9 +67,7 @@ public class LevelManager : MonoBehaviour
 			float tempY = Random.Range(-4.2f,4f);
 			newBubble.transform.position = new Vector3(tempX, tempY, 0);
 			bubbles.Add(newBubble.transform);
-
 		}
-		playerLives = playerStartLives;
 	}
 
 }

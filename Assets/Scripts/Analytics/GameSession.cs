@@ -1,4 +1,5 @@
 ﻿using Splyt;
+using System.Collections.Generic;
 
 public class GameSession {
 
@@ -11,8 +12,17 @@ public class GameSession {
 		gameSession.setProperty ("Mode", gameMode);
 	}
 
+	public void end(ref Dictionary<string, object> data)
+	{
+		if (gameSession == null)	//is null if starting game in arcade scene
+			return;
+
+		gameSession.setProperties (data);
+		gameSession.end ();
+	}
+
 	public void end(bool isWin, int round, int score, int tries){
-		if (gameSession == null)
+		if (gameSession == null)	//is null if starting game in arcade scene
 			return;
 		gameSession.setProperty ("Result", (isWin) ? 1 : 0);
 		gameSession.setProperty ("Round", round);

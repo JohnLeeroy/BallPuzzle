@@ -152,11 +152,21 @@ public class GameManager : MonoBehaviour
 		NotificationCenter.DefaultCenter.PostNotification (this, "Pause");
 		isGameOver = true;
 
-		gameSession.end (isWin, currentLevel, score, levelMang.playerStartLives - levelMang.LivesLeft);
+		Dictionary<string, object> data = new Dictionary<string, object> ();
+		data["Result"] = ((isWin) ? 1 : 0);
+		data["Round"] = currentLevel;
+		data["Score"] = score;
+		data["Tries"] = levelMang.playerStartLives - levelMang.LivesLeft;
+
+		data["BubbleCount"] = levelMang.ballsCount;
+		data ["LifeCount"] = levelMang.playerStartLives;
+
+		gameSession.end (ref data);
 	}
 
-	void OnBubblePop(NotificationCenter.Notification notif)
+	IEnumerator OnBubblePop(NotificationCenter.Notification notif)
 	{
+		yield return 0;
 		levelMang.ballsAlive--;
 		//Debug.Log ("BALLS LEFT " + levelMang.ballsAlive);
 		if (levelMang.ballsAlive <= 0) {
@@ -187,6 +197,7 @@ public class GameManager : MonoBehaviour
 		globalData.setProperty ("WinCount", winCount);
 		globalData.setProperty ("LoseCount", loseCount);
 		globalData.setProperty ("HighestCombo", ScoreSystem.highestCombo);
+
 		globalData.beginAndEnd ();
 	}
 

@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class ScoreSystem : MonoBehaviour {
-
+	
 	public static int highestCombo = 0;	//used for analytics
 
 	public int baseBubbleValue = 100;
