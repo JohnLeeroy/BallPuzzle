@@ -10,8 +10,12 @@ public class MainMenuUI : MonoBehaviour {
 	private bool starting = false;
 	// Use this for initialization
 	void Start () {
-	
+		#if UNITY_WEBPLAYER
+				GameObject.Find("LeaderboardButton").SetActive(false);
+		#endif
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
@@ -31,12 +35,14 @@ public class MainMenuUI : MonoBehaviour {
 				Debug.Log("Credits Button");
 				
 			}
+			#if UNITY_WEBPLAYER
 			else if(leaderboardButton.GetScreenRect().Contains(mousePos))
 			{
 				AudioManager.getInstance().Play(1);
 				Application.LoadLevel("Highscores");
 				Debug.Log("Leaderboard Button");
 			}
+			#endif
 		}
 		
 		if(starting && Input.touchCount == 0)

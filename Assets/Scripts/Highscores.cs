@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+#if !UNITY_WEBPLAYER
 public class Highscores : MonoBehaviour
 {
 	private float fFontSizeRate = 0.05f;
@@ -53,3 +53,5 @@ public class Highscores : MonoBehaviour
 			FileScript.SaveScore( "---", 0 );
 	}
 }
+
+#endif

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-
+#if !UNITY_WEBPLAYER
 public class FileScript : MonoBehaviour 
 {
 	#region public static void SaveScore( string name, int points )
@@ -157,3 +157,5 @@ public class FileScript : MonoBehaviour
 	}
 	#endregion
 }
+
+#endif

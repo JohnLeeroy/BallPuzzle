@@ -8,7 +8,8 @@ public class GameplayUI : MonoBehaviour {
 	public GUIText gtLevel;
 	public GUIText gtScoreText;
 
-
+	TextMesh editScoreText;
+	
 	public GameObject winMenu;
 	public GameObject loseMenu;
 	public GameObject leaderboardMenu;
@@ -55,7 +56,8 @@ public class GameplayUI : MonoBehaviour {
 		isEndGame = true;
 	}
 
-	TextMesh editScoreText;
+
+#if !UNITY_WEBPLAYER
 	void ShowLeaderboard(NotificationCenter.Notification notif)
 	{
 		leaderboardMenu.SetActive (true);
@@ -65,6 +67,7 @@ public class GameplayUI : MonoBehaviour {
 		editScoreText = leaderboardMenu.GetComponent<LeaderboardModal> ().rows [rank].name;
 		StartCoroutine (HandleLeaderboard (rank));
 	}
+#endif
 
 	void UpdatedScore(NotificationCenter.Notification notif)
 	{
@@ -92,7 +95,7 @@ public class GameplayUI : MonoBehaviour {
 		}*/
 		yield return 0;
 		editScoreText.text = Random.Range(100, 999).ToString();
-#else
+#elif !UNITY_WEBPLAYER
 		TouchScreenKeyboard keyboard = TouchScreenKeyboard.Open ("");
 		while (keyboard.active) {
 			if(keyboard.text.Length > 3)
@@ -104,10 +107,11 @@ public class GameplayUI : MonoBehaviour {
 		}
 		editScoreText.text = keyboard.text;
 		
-#endif
 		Leaderboard.Instance.records [rank].name = editScoreText.text;
 		//Debug.Log ("Rank " + rank + "  |   " + name);
 		FileScript.SaveLeaderboard ();
+#endif
+		
 	}
 
 	void Update()

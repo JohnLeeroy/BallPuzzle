@@ -25,7 +25,7 @@ public class Analytics : MonoBehaviour {
 		initDeviceInfo ();
 		//personal17153-neonburst-prod
 		Splyt.InitParams initParams = Splyt.InitParams.create(
-			"personal17153-neonburst-test",
+			"personal17153-neonburst-prod",
 			device,
 			user
 			//,logEnabled: true										// (optional) Typically only set to true during development

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+#if !UNITY_WEBPLAYER
 public class LeaderboardModal : MonoBehaviour {
 
 	public LeaderboardRow[] rows;
@@ -27,3 +27,5 @@ public class LeaderboardModal : MonoBehaviour {
 		}
 	}
 }
+
+#endif

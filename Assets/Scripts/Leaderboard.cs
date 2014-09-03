@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
 public class Leaderboard {
 
 	public List<ScoreRecord> records;
@@ -22,9 +21,11 @@ public class Leaderboard {
 	}
 
 	void init() {
+		records = new List<ScoreRecord> ();
+#if !UNITY_WEBPLAYER
+		
 		IList data = FileScript.GetHighscores();
 		int i = 0;
-		records = new List<ScoreRecord> ();
 		
 		ScoreRecord record;
 		foreach(IDictionary scoreData in data)
@@ -36,6 +37,8 @@ public class Leaderboard {
 			records.Add(record);
 			i++;
 		}
+#endif
+		
 	}
 
 	public int getScoreRank(int score)
@@ -66,8 +69,11 @@ public class Leaderboard {
 
 	public void saveScore(string name, int score)
 	{
+#if !UNITY_WEBPLAYER
+		
 		int rank = getScoreRank (score);
 		if (rank != -1)
 			FileScript.SaveScore (name, score);
+#endif
 	}
 }
